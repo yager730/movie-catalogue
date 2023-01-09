@@ -1,7 +1,12 @@
 import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
 import { SearchComponent } from "./search.component";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from "@angular/forms";
+import { MovieDetailsComponent } from './movie-details/movie-details.component';
+import { MovieResultsListComponent } from './movie-results-list/movie-results-list.component';
+import { MatIconModule } from "@angular/material/icon";
 
 const routes: Routes =[
     { path: '', component: SearchComponent }
@@ -9,9 +14,15 @@ const routes: Routes =[
 
 @NgModule({
     declarations: [
-        SearchComponent
+        SearchComponent,
+        MovieDetailsComponent,
+        MovieResultsListComponent
     ],
     imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        ReactiveFormsModule,
         RouterModule.forChild(routes)
     ]
 })

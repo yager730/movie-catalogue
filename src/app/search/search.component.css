@@ -1,0 +1,11 @@
+.container {
+    padding-top: 2%;
+}
+
+/* Remove bootstrap styles */
+.form-control {
+    border-radius: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    background-color: transparent;
+}

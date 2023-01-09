@@ -4,6 +4,12 @@
 
 .sidenav {
   width: 200px;
+  position: fixed;
+  top: 7.5%;
+}
+
+.sidenav-content {
+  top: 7.5%
 }
 
 .sidenav .mat-toolbar {
@@ -11,7 +17,8 @@
 }
 
 .mat-toolbar.mat-primary {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1;
+  height: 7.5%;
+  z-index: 100;
 }
