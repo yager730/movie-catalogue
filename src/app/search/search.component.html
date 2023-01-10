@@ -13,25 +13,34 @@
             </mat-form-field>
         </form>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-        
-        </div>
+    <div *ngIf="searchResults; else infoText" class="row">
         <div class="col-md-4">
-            <h2>0 Results Found</h2>
+            <h4>{{ numResults }} results found</h4>
             <hr/>
-            <ul class="list-group">
-                <li
-                    class="list-group-item"
-                    *ngFor="let result of searchResults">
-                {{ result.title }}</li>
-            </ul>
-            <app-movie-results-list></app-movie-results-list>
+            <app-movie-results-list *ngFor="let result of searchResults"
+                [movieResult]="result">
+            </app-movie-results-list>
+            <mat-paginator 
+                *ngIf="numResults > 20"
+                style="margin-top: 3%;"
+                [length]="100"
+                [pageSize]="20"
+                aria-label="Select page">
+            </mat-paginator>
+            <br />
         </div>
         <div class="col-md-8">
-            <app-movie-details></app-movie-details>
+            <app-movie-details *ngIf="movieSelected; else selectMovieText"
+                [movie]="movieSelected">
+            </app-movie-details>
             <!-- <router-outlet></router-outlet> -->
+            <ng-template #selectMovieText>
+                <h2>Select a movie from the sidebar!</h2>
+            </ng-template>
         </div>
     </div>
+    <ng-template #infoText>
+        <h2>Please enter a search term to begin.</h2>
+    </ng-template>
 </div>
 

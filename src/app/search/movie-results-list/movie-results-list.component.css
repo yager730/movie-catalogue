@@ -1,0 +1,5 @@
+.mat-mdc-card:hover {
+    border: 1px solid white;
+    cursor: pointer;
+    background-color: #c2185b;
+}
