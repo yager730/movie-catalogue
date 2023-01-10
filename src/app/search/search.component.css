@@ -9,3 +9,22 @@
     -webkit-box-shadow: none;
     background-color: transparent;
 }
+
+/* .form-control:-webkit-autofill:hover {
+    box-shadow: 0 0 0 30px #565656 inset !important;
+    -webkit-box-shadow: 0 0 0 30px #565656 inset !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.87) !important;
+} */
+
+.form-control:-webkit-autofill:focus,
+.form-control:-webkit-autofill:active {
+    box-shadow: 0 0 0 30px #707070 inset !important;
+    -webkit-box-shadow: 0 0 0 30px #707070 inset !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.87) !important;
+}
+
+.form-control:-webkit-autofill {
+    box-shadow: 0 0 0 30px #4a4a4a inset !important;
+    -webkit-box-shadow: 0 0 0 30px #4a4a4a inset !important;
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.87) !important;
+}

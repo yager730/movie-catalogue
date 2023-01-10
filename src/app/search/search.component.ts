@@ -1,37 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { environment } from 'src/environments/environments';
+import { Store } from '@ngrx/store';
+import * as SearchActions from './store/search.actions';
 import { SearchService } from './search.service';
+import { SearchResult } from './search-result.model';
+import { map, Subscription } from 'rxjs';
+
+import * as fromApp from '../store/app.reducer';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   search: FormGroup;
+  searchResults: SearchResult[];
+  subscription: Subscription;
 
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService, private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.search = new FormGroup({
-      'searchTerm': new FormControl(null)
-    })
+      searchTerm: new FormControl()
+    });
+    this.subscription = this.store.select('search')
+    .pipe(map(searchState => searchState.results))
+    .subscribe(
+      (results: SearchResult[]) => {
+        this.searchResults = results;
+      }
+    );
   }
 
   onSubmit() {
-    console.log(this.searchService.search(this.search.value.searchTerm).subscribe({
-      next: (responseData) => {
-          console.log(responseData);
-          // this.isLoading = false;
-          // this.router.navigate(['/recipes']);
-      },
-      error: (errorMessage) => {
-          console.log(errorMessage);
-          // this.error = errorMessage;
-          // this.isLoading = false;
-      }
-    }));
+    this.store.dispatch(new SearchActions.MovieSearch(this.search.value.searchTerm));
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

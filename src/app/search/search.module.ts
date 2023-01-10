@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
 import { MovieResultsListComponent } from './movie-results-list/movie-results-list.component';
 import { MatIconModule } from "@angular/material/icon";
+import { CommonModule } from "@angular/common";
 
 const routes: Routes =[
     { path: '', component: SearchComponent }
@@ -19,6 +20,7 @@ const routes: Routes =[
         MovieResultsListComponent
     ],
     imports: [
+        CommonModule,
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,

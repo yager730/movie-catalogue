@@ -1,22 +1,31 @@
 <div class="container">
     <div class="row">
         <form class="search-form unstyled" [formGroup]="search" (ngSubmit)="onSubmit()">
-            <mat-form-field style="display: block">
+            <mat-form-field  class="search-input" style="display: block">
                 <mat-label for="searchTerm">Search for a Movie</mat-label>
                 <input matInput
                 class="toolbar-search"
                 type="text"
                 id="searchTerm"
                 formControlName="searchTerm"
-                class="form-control unstyled">
+                class="form-control">
                 <mat-icon matPrefix style="font-size: 1.2em" (click)="onSubmit()">search</mat-icon>
             </mat-form-field>
         </form>
     </div>
     <div class="row">
+        <div class="col-md-12">
+        
+        </div>
         <div class="col-md-4">
             <h2>0 Results Found</h2>
             <hr/>
+            <ul class="list-group">
+                <li
+                    class="list-group-item"
+                    *ngFor="let result of searchResults">
+                {{ result.title }}</li>
+            </ul>
             <app-movie-results-list></app-movie-results-list>
         </div>
         <div class="col-md-8">
