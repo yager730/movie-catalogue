@@ -17,6 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import * as fromApp from './store/app.reducer';
 import { SearchEffects } from './search/store/search.effects';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { SearchEffects } from './search/store/search.effects';
     MatIconModule,
     MatListModule,
     StoreModule.forRoot(fromApp.appReducer),
-    EffectsModule.forRoot([SearchEffects])
+    EffectsModule.forRoot([SearchEffects]),
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
