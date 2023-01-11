@@ -1,4 +1,29 @@
 .img-responsive {
-    height: 500px
+    max-width: 100%
+}
 
+.mat-mdc-card-title {
+    font-size: 3em;
+    line-height: 1em;
+}
+
+.mat-mdc-card-subtitle {
+    font-size: 1.4em;
+    margin-top: 1.75%;
+}
+
+.overview-header {
+    font-size: medium;
+    text-decoration: underline;
+    margin-bottom: 7.5px;
+}
+
+.tagline {
+    font-style: italic;
+    color: #888888;
+    margin-top: 2%;
+}
+
+.mat-divider {
+    color: #000000;
 }

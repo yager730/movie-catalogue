@@ -2,15 +2,44 @@
 <div class="container">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>{{ movieDetails.title }}</mat-card-title>
-            <mat-card-subtitle>{{ movieDetails.tagline }}</mat-card-subtitle>
+            <mat-card-title>{{ movieDetails?.title }} {{ movieDetails?.release_date ? '(' + movieDetails?.release_date.substring(0,4) + ')' : '' }}</mat-card-title>
+            <mat-card-subtitle class="tagline">{{ movieDetails?.tagline }}</mat-card-subtitle>
+            <mat-card-subtitle class="director">Directed by {{ director }}</mat-card-subtitle>
         </mat-card-header>
-        <mat-card-content>
-            <img src="{{ movieDetails.poster }}" alt="{{ movieDetails.title }}" class="img-responsive" />
-        </mat-card-content>
+        <div class="row">
+            <div class="col-6">
+                <mat-card-content>
+                    <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" />
+                </mat-card-content>
+            </div>
+            <div class="col-6">
+                <mat-card-content>
+                    <p class="overview-header">Overview</p>
+                    <p>{{ movieDetails?.overview }}</p>
+                    <mat-card-subtitle>Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
+                    <br />
+                    <mat-list>
+                        <mat-list-item *ngFor="let castMember of movieCrew?.cast.slice(0, 5)"
+                        style="border-bottom: 1px solid white;">{{ castMember.name }}</mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+            </div>
+        </div>
     </mat-card>
 </div>
 
-
-
-<p>{{ movieDetails.release_date }}</p>
+<!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div *ngFor="let image of movieImages?.images" class="carousel-item active">
+        <img class="d-block w-100" src="image.file_path" alt="movie-image" />
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div> -->

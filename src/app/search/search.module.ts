@@ -9,6 +9,8 @@ import { MovieDetailsComponent } from './movie-details/movie-details.component';
 import { MovieResultsListComponent } from './movie-results-list/movie-results-list.component';
 import { MatIconModule } from "@angular/material/icon";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatListModule } from "@angular/material/list"
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 
@@ -30,6 +32,8 @@ const routes: Routes =[
         MatCardModule,
         MatPaginatorModule,
         MatButtonModule,
+        MatDividerModule,
+        MatListModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes)
     ]

@@ -1,4 +1,4 @@
-import { MovieDetails } from "../movie-data.model";
+import { MovieCrew, MovieDetails, MovieImages } from "../movie-data.model";
 import { SearchResult } from "../search-result.model";
 import * as SearchActions from "./search.actions";
 
@@ -6,7 +6,11 @@ export interface State {
     results: SearchResult [];
     numResults: number;
     selectedMovie: number;
-    movieDetails: MovieDetails | null;
+    movieInfo: {
+        movieDetails: MovieDetails | null;
+        movieCrew: MovieCrew | null;
+        movieImages: MovieImages | null;
+    };
     apiError: string;
     loading: boolean;
 }
@@ -15,7 +19,11 @@ const initState: State = {
     results: null,
     numResults: 0,
     selectedMovie: null,
-    movieDetails: null,
+    movieInfo: {
+        movieDetails: null,
+        movieCrew: null,
+        movieImages: null
+    },
     apiError: null,
     loading: false
 };
@@ -45,6 +53,7 @@ export function searchReducer(state: State = initState, action: SearchActions.Se
                 loading: false
             }
         case SearchActions.MOVIE_SELECT:
+            console.log(state.results);
             return {
                 ...state,
                 selectedMovie: action.payload
@@ -53,7 +62,28 @@ export function searchReducer(state: State = initState, action: SearchActions.Se
             console.log(action.payload);
             return {
                 ...state,
-                movieDetails: action.payload
+                movieInfo: {
+                    ...state.movieInfo,
+                    movieDetails: action.payload
+                } 
+            }
+        case SearchActions.MOVIE_SELECT_CREW:
+            console.log(action.payload);
+            return {
+                ...state,
+                movieInfo: {
+                    ...state.movieInfo,
+                    movieCrew: action.payload
+                } 
+            }
+        case SearchActions.MOVIE_SELECT_IMAGES:
+            console.log(action.payload);
+            return {
+                ...state,
+                movieInfo: {
+                    ...state.movieInfo,
+                    movieImages: action.payload
+                } 
             }
         default:
             return state;

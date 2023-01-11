@@ -1,11 +1,13 @@
 import { Action } from "@ngrx/store";
-import { MovieDetails } from "../movie-data.model";
+import { MovieDetails, MovieCrew, MovieImages } from "../movie-data.model";
 import { SearchResult } from "../search-result.model";
 
 export const MOVIE_SEARCH = '[Search] Search';
 export const MOVIE_SEARCH_RESULTS = '[Search] Search Results';
 export const MOVIE_SELECT = '[Search] Select';
-export const MOVIE_SELECT_DETAILS = '[Search] Select Details'
+export const MOVIE_SELECT_DETAILS = '[Search] Select Details';
+export const MOVIE_SELECT_CREW = '[Search] Select Crew';
+export const MOVIE_SELECT_IMAGES = '[Search] Select Images';
 export const SEARCH_ERROR = '[Search] Search Error';
 
 export class MovieSearch implements Action {
@@ -33,6 +35,16 @@ export class SelectedMovieDetails implements Action {
     constructor(public payload: MovieDetails) {}
 }
 
+export class SelectedMovieCrew implements Action {
+    readonly type = MOVIE_SELECT_CREW;
+    constructor(public payload: MovieCrew) {}
+}
+
+export class SelectedMovieImages implements Action {
+    readonly type = MOVIE_SELECT_IMAGES;
+    constructor(public payload: MovieImages) {}
+}
+
 export type SearchActions = 
     MovieSearch | MovieSearchResults | SearchError |
-    MovieSelect | SelectedMovieDetails
+    MovieSelect | SelectedMovieDetails | SelectedMovieCrew | SelectedMovieImages
