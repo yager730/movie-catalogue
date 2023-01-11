@@ -1,43 +1,40 @@
-
-<div class="container">
-    <mat-card>
-        <mat-card-header>
-            <mat-card-title>{{ movieDetails?.title }} {{ movieDetails?.release_date ? '(' + movieDetails?.release_date.substring(0,4) + ')' : '' }}</mat-card-title>
-            <mat-card-subtitle class="tagline">{{ movieDetails?.tagline }}</mat-card-subtitle>
-            <mat-card-subtitle class="director">Directed by {{ director }}</mat-card-subtitle>
-        </mat-card-header>
-        <div class="row">
-            <div class="col-6">
-                <mat-card-content>
-                    <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" />
-                    <div>
-                        <p class="overview-header" style="color: white; margin: 5% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
-                        <button mat-raised-button color="primary" style="margin: 3% 3% 3% 0%;">Leave a Review</button>
-                        <button mat-raised-button color="primary" style="margin: 3% 3% 3% 0%;">Add to Watchlist</button>
-                    </div>
-                </mat-card-content>
-            </div>
-            <div class="col-6">
-                <mat-card-content>
-                    <ngb-carousel *ngIf="movieImages?.images" [showNavigationIndicators]="false">
-                        <ng-template ngbSlide *ngFor="let image of movieImages.images;">
-                            <div>
-                                <img src="{{ image }}" alt="Random first slide" style="max-width: 100%; opacity: 70%;"/>
-                            </div>
-                        </ng-template>
-                    </ngb-carousel>
-                    <br />
-                    <div><p class="overview-header">Overview</p></div>
-                    <p>{{ movieDetails?.overview }}</p>
-                    <mat-card-subtitle class="tagline">Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
-                    <mat-list style="margin-top: 3%">
-                        <div><p class="overview-header">Featuring</p></div>
-                        <mat-list-item *ngFor="let castMember of movieCrew?.cast.slice(0, 5); let i = index; first as isFirst"
-                        [class.first]="isFirst" style="border-bottom: 1px solid white;">{{ castMember.name }} 
-                        <span class="character-text">as {{ castMember.character }}</span></mat-list-item>
-                    </mat-list>
-                </mat-card-content>
-            </div>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>{{ movieDetails?.title }} {{ movieDetails?.release_date ? '(' + movieDetails?.release_date.substring(0,4) + ')' : '' }}</mat-card-title>
+        <mat-card-subtitle class="tagline">{{ movieDetails?.tagline }}</mat-card-subtitle>
+        <mat-card-subtitle class="director">Directed by {{ director }}</mat-card-subtitle>
+    </mat-card-header>
+    <div class="row">
+        <div class="col-6">
+            <mat-card-content>
+                <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" />
+                <div>
+                    <p class="overview-header" style="color: white; margin: 5% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
+                    <button mat-raised-button color="primary" style="margin: 3% 3% 3% 0%;">Leave a Review</button>
+                    <button mat-raised-button color="primary" style="margin: 3% 3% 3% 0%;">Add to Watchlist</button>
+                </div>
+            </mat-card-content>
         </div>
-    </mat-card>
-</div>
+        <div class="col-6">
+            <mat-card-content>
+                <ngb-carousel *ngIf="movieImages?.images" [showNavigationIndicators]="false">
+                    <ng-template ngbSlide *ngFor="let image of movieImages.images;">
+                        <div>
+                            <img src="{{ image }}" alt="Random first slide" style="max-width: 100%; opacity: 70%;"/>
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
+                <br />
+                <div><p class="overview-header">Overview</p></div>
+                <p>{{ movieDetails?.overview }}</p>
+                <mat-card-subtitle class="tagline">Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
+                <mat-list style="margin-top: 3%">
+                    <div><p class="overview-header">Featuring</p></div>
+                    <mat-list-item *ngFor="let castMember of movieCrew?.cast.slice(0, 5); let i = index; first as isFirst"
+                    [class.first]="isFirst" style="border-bottom: 1px solid white;">{{ castMember.name }} 
+                    <span class="character-text">as {{ castMember.character }}</span></mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </div>
+    </div>
+</mat-card>
