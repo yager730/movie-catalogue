@@ -5,6 +5,7 @@ export interface MovieDetails {
     runtime: number | null,
     release_date: string,
     poster: string | null,
+    score: number,
     overview: string
 }
 
@@ -39,13 +40,5 @@ export interface MovieCrew {
 }
 
 export interface MovieImages {
-    images: {
-        aspect_ratio: number,
-        file_path: string,
-        height: number,
-        iso_639_1: string | null,
-        vote_average: number,
-        vote_count: number,
-        width: number
-    } []
+    images: string []
 }

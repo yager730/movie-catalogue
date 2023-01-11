@@ -17,7 +17,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import * as fromApp from './store/app.reducer';
 import { SearchEffects } from './search/store/search.effects';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [

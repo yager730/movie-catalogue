@@ -18,6 +18,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   movieImages: MovieImages;
 
   director: string;
+  rating: number;
   
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -29,6 +30,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       this.movieCrew = results.movieInfo.movieCrew;
       this.movieImages = results.movieInfo.movieImages;
       this.director = results.movieInfo.movieCrew?.crew.filter(el => el.job === 'Director')[0].name;
+      this.rating = Math.round(results.movieInfo.movieDetails?.score * 100) / 100;
     });
   }
 

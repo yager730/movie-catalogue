@@ -50,7 +50,7 @@ export class SearchEffects {
                 return handleError(errorResponse);
             }))
         })
-    ))
+    ));
 
     getMovieDetails = createEffect(() => this.actions$.pipe(
         ofType(SearchActions.MOVIE_SELECT),
@@ -64,6 +64,7 @@ export class SearchEffects {
                     tagline: resData.tagline,
                     runtime: resData.runtime,
                     release_date: resData.release_date,
+                    score: resData.vote_average,
                     poster: resData.poster_path ? 'https://image.tmdb.org/t/p/original' + resData.poster_path : null,
                     overview: resData.overview
                 });
@@ -89,10 +90,11 @@ export class SearchEffects {
         ofType(SearchActions.MOVIE_SELECT),
         switchMap((selectedMovie: SearchActions.MovieSelect) => {
             return this.http.get<MovieImagesResponseData>(baseURL + '/movie/' + selectedMovie.payload + 
-            '/images?api_key=' + environment.TMDB_API_key + '&language=en-US')
+            '/images?api_key=' + environment.TMDB_API_key + '&language=en-US&include_image_language=en%2Cnull')
             .pipe(map(resData => {
+                const image_paths = resData.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
                 return new SearchActions.SelectedMovieImages({
-                    images: resData.backdrops
+                    images: image_paths
                 });
             }));
         })

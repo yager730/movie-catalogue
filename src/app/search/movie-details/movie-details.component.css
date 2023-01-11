@@ -14,8 +14,10 @@
 
 .overview-header {
     font-size: medium;
-    text-decoration: underline;
+    /* text-decoration: underline; */
     margin-bottom: 7.5px;
+    color: #c2185ccb; 
+    font-weight: 700;
 }
 
 .tagline {
@@ -26,4 +28,13 @@
 
 .mat-divider {
     color: #000000;
+}
+
+.first {
+    border-top: 1px solid white;
+}
+
+.character-text {
+    font-style: italic;
+    color: #707070;
 }
