@@ -2,6 +2,14 @@
     max-width: 100%
 }
 
+.mat-mdc-card {
+    border-radius: 25px;
+}
+
+.mat-mdc-card-header {
+    border-radius: 25px 25px 0px 0px;
+}
+
 .mat-mdc-card-title {
     font-size: 3em;
     line-height: 1em;
@@ -21,8 +29,9 @@
 }
 
 .tagline {
+    font-size: 1.2em;
     font-style: italic;
-    color: #888888;
+    color: #bdbdbdac;
     margin-top: 2%;
 }
 

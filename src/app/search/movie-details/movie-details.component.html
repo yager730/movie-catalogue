@@ -1,8 +1,8 @@
 <mat-card>
-    <mat-card-header>
+    <mat-card-header style="background-image: linear-gradient( #c2185ca4, #424242);">
         <mat-card-title>{{ movieDetails?.title }} {{ movieDetails?.release_date ? '(' + movieDetails?.release_date.substring(0,4) + ')' : '' }}</mat-card-title>
         <mat-card-subtitle class="tagline">{{ movieDetails?.tagline }}</mat-card-subtitle>
-        <mat-card-subtitle class="director">Directed by {{ director }}</mat-card-subtitle>
+        <mat-card-subtitle class="director" style="margin-top: 10px; padding-bottom: 3%;">Directed by {{ director }}</mat-card-subtitle>
     </mat-card-header>
     <div class="row">
         <div class="col-6">
@@ -34,7 +34,8 @@
                 <br />
                 <div><p class="overview-header">Overview</p></div>
                 <p>{{ movieDetails?.overview }}</p>
-                <mat-card-subtitle class="tagline">Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
+                <mat-card-subtitle style="font-style: italic; color: #888888; margin-top: 2%;">
+                    Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
                 <mat-list style="margin-top: 3%">
                     <div><p class="overview-header">Featuring</p></div>
                     <mat-list-item *ngFor="let castMember of movieCrew?.cast.slice(0, 5); let i = index; first as isFirst"
