@@ -1,18 +1,14 @@
-import { SearchResult } from "src/app/search/search-result.model";
+import { movieInfo } from "src/app/shared/movie-info.model";
 import * as WatchlistActions from "./watchlist.actions";
 
-export interface AppState {
-    shoppingList: State;
-}
-
 export interface State {
-    films: SearchResult[];
-    editedIngredientIndex: number;
+    films: movieInfo[];
+    selectedFilmIndex: number;
 }
 
 const initState: State = {
     films: [],
-    editedIngredientIndex: -1
+    selectedFilmIndex: -1
 };
 
 export function watchlistReducer(state: State = initState, action: WatchlistActions.WatchlistActions) {

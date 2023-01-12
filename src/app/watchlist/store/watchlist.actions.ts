@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { SearchResult } from 'src/app/search/search-result.model';
+import { movieInfo } from 'src/app/shared/movie-info.model';
 
 export const GET_WATCHLIST = '[Watchlist] Get Watchlist'
 export const ADD_FILM = '[Watchlist] Add Film to Watchlist';
@@ -11,7 +11,7 @@ export class GetUpdatedWatchlist implements Action {
 
 export class AddToWatchlist implements Action {
     readonly type = ADD_FILM;
-    constructor (public payload: SearchResult) {}
+    constructor (public payload: movieInfo) {}
 }
 
 export class RemoveFromWatchlist implements Action {

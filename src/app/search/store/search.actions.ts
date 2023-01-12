@@ -1,5 +1,5 @@
 import { Action } from "@ngrx/store";
-import { MovieDetails, MovieCrew, MovieImages } from "../movie-data.model";
+import { MovieDetails, MovieCrew } from "../../shared/movie-info.model";
 import { SearchResult } from "../search-result.model";
 
 export const MOVIE_SEARCH = '[Search] Search';
@@ -42,7 +42,7 @@ export class SelectedMovieCrew implements Action {
 
 export class SelectedMovieImages implements Action {
     readonly type = MOVIE_SELECT_IMAGES;
-    constructor(public payload: MovieImages) {}
+    constructor(public payload: string []) {}
 }
 
 export type SearchActions = 

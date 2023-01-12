@@ -1,4 +1,4 @@
-import { MovieCrew, MovieDetails, MovieImages } from "../movie-data.model";
+import { movieInfo } from "../../shared/movie-info.model";
 import { SearchResult } from "../search-result.model";
 import * as SearchActions from "./search.actions";
 
@@ -6,11 +6,7 @@ export interface State {
     results: SearchResult [];
     numResults: number;
     selectedMovie: number;
-    movieInfo: {
-        movieDetails: MovieDetails | null;
-        movieCrew: MovieCrew | null;
-        movieImages: MovieImages | null;
-    };
+    movieInfo: movieInfo;
     apiError: string;
     loading: boolean;
 }
@@ -22,7 +18,7 @@ const initState: State = {
     movieInfo: {
         movieDetails: null,
         movieCrew: null,
-        movieImages: null
+        movieImagePaths: null
     },
     apiError: null,
     loading: false
@@ -82,7 +78,7 @@ export function searchReducer(state: State = initState, action: SearchActions.Se
                 ...state,
                 movieInfo: {
                     ...state.movieInfo,
-                    movieImages: action.payload
+                    movieImagePaths: action.payload
                 } 
             }
         default:

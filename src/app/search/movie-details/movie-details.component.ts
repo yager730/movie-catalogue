@@ -1,10 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
-import { MovieCrew, MovieDetails, MovieImages } from '../movie-data.model';
 import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
 
 import * as fromApp from '../../store/app.reducer';
+import { MovieCrew, MovieDetails } from '../../shared/movie-info.model';
 
 @Component({
   selector: 'app-movie-details',
@@ -18,7 +18,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
   movieDetails: MovieDetails;
   movieCrew: MovieCrew;
-  movieImages: MovieImages;
+  movieImages: string [];
 
   onWatchlist: boolean;
   director: string;
@@ -32,19 +32,23 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     .subscribe((results) => {
       this.movieDetails = results.movieInfo.movieDetails;
       this.movieCrew = results.movieInfo.movieCrew;
-      this.movieImages = results.movieInfo.movieImages;
+      this.movieImages = results.movieInfo.movieImagePaths;
       this.director = results.movieInfo.movieCrew?.crew.filter(el => el.job === 'Director')[0].name;
       this.rating = Math.round(results.movieInfo.movieDetails?.score * 100) / 100;
     });
     this.watchlistSubscription = this.store.select('watchlist')
     .pipe(map(watchlistState => watchlistState))
     .subscribe((results) => {
-      this.onWatchlist = results.films.map(el => el.id).includes(this.movie);
+      this.onWatchlist = results.films.map(el => el.movieDetails.id).includes(this.movie);
     });
   }
 
   addToWatchlist() {
-    this.store.dispatch(new WatchlistActions.AddToWatchlist(this.movieDetails))
+    this.store.dispatch(new WatchlistActions.AddToWatchlist({
+      movieDetails: this.movieDetails,
+      movieCrew: this.movieCrew,
+      movieImagePaths: this.movieImages
+    }));
   }
 
   doesNothing() { }

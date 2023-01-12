@@ -24,10 +24,10 @@
         </div>
         <div class="col-6">
             <mat-card-content>
-                <ngb-carousel *ngIf="movieImages?.images" [showNavigationIndicators]="false">
-                    <ng-template ngbSlide *ngFor="let image of movieImages.images;">
+                <ngb-carousel *ngIf="movieImages" [showNavigationIndicators]="false">
+                    <ng-template ngbSlide *ngFor="let image of movieImages">
                         <div>
-                            <img src="{{ image }}" alt="Random first slide" style="max-width: 100%; opacity: 70%;"/>
+                            <img src="{{ image }}" alt="Associated film image" style="max-width: 100%; opacity: 70%;"/>
                         </div>
                     </ng-template>
                 </ngb-carousel>

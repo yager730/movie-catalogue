@@ -1,3 +1,9 @@
+export interface movieInfo {
+    movieDetails: MovieDetails,
+    movieCrew: MovieCrew,
+    movieImagePaths: string []
+};
+
 export interface MovieDetails {
     id: number,
     title: string,
@@ -37,8 +43,4 @@ export interface MovieCrew {
         department: string,
         job: string 
     } []
-}
-
-export interface MovieImages {
-    images: string []
 }

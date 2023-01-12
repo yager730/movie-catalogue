@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import * as WatchlistActions from './store/watchlist.actions';
+import { Observable } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
-import { SearchResult } from '../search/search-result.model';
+import { movieInfo } from '../shared/movie-info.model';
 
 @Component({
   selector: 'app-watchlist',
@@ -11,7 +10,7 @@ import { SearchResult } from '../search/search-result.model';
   styleUrls: ['./watchlist.component.css'],
 })
 export class WatchlistComponent implements OnInit {
-  watchlistMovies: Observable<{ films: SearchResult[] }>;
+  watchlistMovies: Observable<{ films: movieInfo[] }>;
   // private igChangeSub: Subscription;
 
   constructor(

@@ -94,9 +94,7 @@ export class SearchEffects {
             '/images?api_key=' + environment.TMDB_API_key + '&language=en-US&include_image_language=en%2Cnull')
             .pipe(map(resData => {
                 const image_paths = resData.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
-                return new SearchActions.SelectedMovieImages({
-                    images: image_paths
-                });
+                return new SearchActions.SelectedMovieImages(image_paths);
             }));
         })
     ));

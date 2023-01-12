@@ -4,8 +4,8 @@
             <mat-list *ngIf="(watchlistMovies | async).films.length > 0; else noFilms" style="margin-top: 3%">
                 <div><p class="overview-header">My Watchlist</p></div>
                 <mat-list-item *ngFor="let film of (watchlistMovies | async).films; let i = index" 
-                style="border-bottom: 1px solid white;">{{ film.title }} 
-                <span class="character-text">{{ film.release_date ? '(' + film?.release_date.substring(0,4) + ')' : '' }}</span></mat-list-item>
+                style="border-bottom: 1px solid white;">{{ film.movieDetails.title }} 
+                <span class="character-text">{{ film.movieDetails.release_date ? '(' + film.movieDetails.release_date.substring(0,4) + ')' : '' }}</span></mat-list-item>
             </mat-list>
             <ng-template #noFilms>
                 <h2>Nubby Beezer</h2>
