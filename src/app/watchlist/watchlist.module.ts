@@ -1,6 +1,8 @@
+import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { WatchlistComponent } from "./watchlist.component";
+import { MatListModule } from "@angular/material/list"
 
 const routes: Routes =[
     { path: '', component: WatchlistComponent }
@@ -11,6 +13,8 @@ const routes: Routes =[
         WatchlistComponent
     ],
     imports: [
+        CommonModule,
+        MatListModule,
         RouterModule.forChild(routes)
     ]
 })

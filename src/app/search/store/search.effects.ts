@@ -5,6 +5,7 @@ import { catchError, map, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environments';
 import { CrewResponseData, MovieDetailsResponseData, MovieImagesResponseData, SearchResponseData } from './api-response.interfaces';
 
+import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
 import * as SearchActions from './search.actions';
 
 const baseURL = 'https://api.themoviedb.org/3';
@@ -99,4 +100,9 @@ export class SearchEffects {
             }));
         })
     ));
+
+    updateWatchlist = createEffect(() => this.actions$.pipe(
+        ofType(SearchActions.MOVIE_SELECT_DETAILS),
+        map(() => new WatchlistActions.GetUpdatedWatchlist())
+    ))
 }

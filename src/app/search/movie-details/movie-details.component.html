@@ -10,8 +10,15 @@
                 <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" />
                 <div>
                     <p class="overview-header" style="color: white; margin: 5% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
-                    <button mat-raised-button color="primary" style="margin: 3% 3% 3% 0%;">Leave a Review</button>
-                    <button mat-raised-button color="primary" style="margin: 3% 3% 3% 0%;">Add to Watchlist</button>
+                    <button mat-raised-button color="primary" style="margin: 3% 3% 3% 0%;">
+                        <mat-icon>create</mat-icon>Leave a Review</button>    
+                    <button mat-raised-button color="primary" style="margin: 3% 0% 3% 0%;" 
+                        *ngIf="!onWatchlist; else disabledButton"
+                        (click)="addToWatchlist()"><mat-icon>add</mat-icon>Add to Watchlist</button>
+                    <ng-template #disabledButton>
+                        <button mat-raised-button disabled style="margin: 3% 0% 3% 0%;" >
+                        <mat-icon>check</mat-icon>Added to Watchlist</button>
+                    </ng-template>
                 </div>
             </mat-card-content>
         </div>
