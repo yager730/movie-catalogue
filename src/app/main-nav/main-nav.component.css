@@ -1,6 +1,6 @@
 .sidenav-container {
-  height: 100%;
-  overflow-y: scroll;
+  height: 92.5%;
+  top: 7.5%;
 }
 
 .sidenav {
@@ -10,7 +10,7 @@
 }
 
 .sidenav-content {
-  top: 7.5%
+  overflow-y: scroll;
 }
 
 .sidenav .mat-toolbar {
