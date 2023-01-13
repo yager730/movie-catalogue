@@ -10,6 +10,11 @@
     background-color: transparent;
 }
 
+.mat-mdc-raised-button.filter-search-button {
+    margin-right: 1%;
+    background-color: #c2185ca4;
+}
+
 .form-control:-webkit-autofill:focus,
 .form-control:-webkit-autofill:active {
     box-shadow: 0 0 0 30px #707070 inset !important;

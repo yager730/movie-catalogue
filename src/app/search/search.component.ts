@@ -14,6 +14,9 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent implements OnInit, OnDestroy {
+  @ViewChild('paginator') paginator: MatPaginator;
+  displaying = 'Most Popular';
+
   search: FormGroup;
   searchResults: SearchResult[];
   currentSearchTerm: string;
@@ -21,7 +24,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   numResults: number;
   movieSelected: number;
   subscription: Subscription;
-  @ViewChild('paginator') paginator: MatPaginator;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -37,12 +39,36 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.numResults = results.numResults;
         this.movieSelected = results.selectedMovie;
     });
+    this.store.dispatch(new SearchActions.FetchMovies('popular'));
+    //console.log(this.searchResults);
+    //this.store.dispatch(new SearchActions.MovieSelect(this.searchResults[0].id));
   }
 
   onSubmit() {
+    this.displaying = 'Search';
     this.store.dispatch(new SearchActions.UpdateSearchTerm(this.currentSearchTerm));
     this.store.dispatch(new SearchActions.MovieSearch(this.currentSearchTerm));
     this.paginator.firstPage();
+  }
+
+  showMovies(filter: 'top_rated' | 'popular' | 'upcoming') {
+    switch (filter) {
+      case 'top_rated':
+        if (this.displaying === 'Top Rated') { return }
+        this.displaying = 'Top Rated';
+        break;
+      case 'popular':
+        if (this.displaying === 'Most Popular') { return }
+        this.displaying = 'Most Popular';
+        break;
+      case 'upcoming':
+        if (this.displaying === 'Upcoming') { return }
+        this.displaying = 'Upcoming';
+        break;
+      default:
+        break;
+    }
+    this.store.dispatch(new SearchActions.FetchMovies(filter));
   }
 
   handlePagination(event?:PageEvent) {

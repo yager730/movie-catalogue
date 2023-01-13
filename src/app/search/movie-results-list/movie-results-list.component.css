@@ -3,3 +3,8 @@
     cursor: pointer;
     background-color: #c2185b;
 }
+
+.mat-mdc-card .selected {
+    background-color: #c2185ca4;
+    border-radius: 3px;
+}

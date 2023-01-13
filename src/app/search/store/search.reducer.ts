@@ -15,7 +15,7 @@ export interface State {
 const initState: State = {
     searchTerm: null,
     results: null,
-    numResults: 0,
+    numResults: null,
     selectedMovie: null,
     movieInfo: {
         movieDetails: null,
@@ -28,6 +28,15 @@ const initState: State = {
 
 export function searchReducer(state: State = initState, action: SearchActions.SearchActions) {
     switch (action.type) {
+        case SearchActions.FETCH_MOVIES:
+            return {
+                ...state
+            };
+        case SearchActions.PAGE_UPDATE:
+            return {
+                ...state,
+                results: action.payload
+            }
         case SearchActions.MOVIE_SEARCH_TERM_UPDATE:
             return {
                 ...state,

@@ -1,5 +1,5 @@
 <mat-card style="margin-top: 1%;" (click)="onClick()">
-    <mat-card-content>
+    <mat-card-content [class.selected]="movieSelected === movieResult.id">
         {{ movieResult.title }} {{ movieResult.release_date ? '(' + movieResult.release_date.substring(0,4) + ')' : '' }}
     </mat-card-content>
 </mat-card>

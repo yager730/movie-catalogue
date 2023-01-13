@@ -2,15 +2,22 @@ import { Action } from "@ngrx/store";
 import { MovieDetails, MovieCrew } from "../../shared/movie-info.model";
 import { SearchResult } from "../search-result.model";
 
+export const FETCH_MOVIES = '[Search] Fetch Movies'
 export const MOVIE_SEARCH_TERM_UPDATE = '[Search] Search Term Update';
 export const MOVIE_SEARCH = '[Search] Search';
 export const MOVIE_SEARCH_RESULTS = '[Search] Search Results';
 export const VIEW_SEARCH_RESULTS_PAGE = '[Search] View Search Results Page';
+export const PAGE_UPDATE = '[Search] Page Update'
 export const MOVIE_SELECT = '[Search] Select';
 export const MOVIE_SELECT_DETAILS = '[Search] Select Details';
 export const MOVIE_SELECT_CREW = '[Search] Select Crew';
 export const MOVIE_SELECT_IMAGES = '[Search] Select Images';
 export const SEARCH_ERROR = '[Search] Search Error';
+
+export class FetchMovies implements Action {
+    readonly type = FETCH_MOVIES;
+    constructor(public payload: 'top_rated' | 'popular' | 'upcoming') {}
+}
 
 export class UpdateSearchTerm implements Action {
     readonly type= MOVIE_SEARCH_TERM_UPDATE;
@@ -30,6 +37,11 @@ export class MovieSearchResults implements Action {
 export class ViewResultsPage implements Action {
     readonly type= VIEW_SEARCH_RESULTS_PAGE;
     constructor(public payload: { page_number: number, search_term: string }) {}
+}
+
+export class UpdatePage implements Action {
+    readonly type = PAGE_UPDATE;
+    constructor(public payload: SearchResult[]) {}
 }
 
 export class SearchError implements Action {
@@ -58,5 +70,5 @@ export class SelectedMovieImages implements Action {
 }
 
 export type SearchActions = 
-    UpdateSearchTerm | MovieSearch | MovieSearchResults | SearchError | ViewResultsPage |
-    MovieSelect | SelectedMovieDetails | SelectedMovieCrew | SelectedMovieImages
+    UpdateSearchTerm | UpdatePage | MovieSearch | MovieSearchResults | SearchError | ViewResultsPage |
+    FetchMovies | MovieSelect | SelectedMovieDetails | SelectedMovieCrew | SelectedMovieImages

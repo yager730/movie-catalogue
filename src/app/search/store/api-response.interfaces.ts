@@ -15,6 +15,9 @@ export interface SearchResponseData {
         vote_count: number;
         video: boolean;
         vote_average: number; } [];
+    dates?: {
+        maximum: string;
+        minimum: string; } [];
     total_results: number;
     total_pages: number;
 }

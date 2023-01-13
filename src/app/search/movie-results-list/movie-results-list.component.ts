@@ -4,6 +4,7 @@ import { SearchResult } from '../search-result.model';
 import * as SearchActions from '../store/search.actions';
 
 import * as fromApp from '../../store/app.reducer';
+import { map, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-movie-results-list',
@@ -12,8 +13,18 @@ import * as fromApp from '../../store/app.reducer';
 })
 export class MovieResultsListComponent {
   @Input() movieResult: SearchResult;
+  subscription: Subscription;
+  movieSelected: number;
 
   constructor(private store: Store<fromApp.AppState>) {}
+
+  ngOnInit() {
+    this.subscription = this.store.select('search')
+    .pipe(map(searchState => searchState))
+    .subscribe((results) => {
+      this.movieSelected = results.selectedMovie;
+    });
+  }
 
   onClick() {
     console.log("Clicked movie with ID:" + this.movieResult.id)

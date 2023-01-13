@@ -28,6 +28,31 @@ export class SearchEffects {
 
     constructor(private actions$: Actions, private http: HttpClient) {}
 
+    // Get top 20 results for popular movies
+    fetchPopularMovies = createEffect(() => this.actions$.pipe(
+        ofType(SearchActions.FETCH_MOVIES),
+        switchMap((filter: SearchActions.FetchMovies) => {
+            return this.http.get<SearchResponseData>(baseURL + '/movie/' + filter.payload + '?api_key=' + environment.TMDB_API_key 
+            + '&page=1&language=en-US')
+            .pipe(map(resData => {
+                const searchResults = resData.results.map(result => {
+                    return {
+                        id: result.id, 
+                        title: result.title, 
+                        release_date: result.release_date
+                    }
+                });
+                return new SearchActions.MovieSearchResults({
+                    results_found: 15,
+                    results_list: searchResults.slice(0, 15)
+                });
+            }),
+            catchError(errorResponse => {
+                return handleError(errorResponse);
+            }))
+        })
+    ));
+
     movieSearch = createEffect(() => this.actions$.pipe(
         ofType(SearchActions.MOVIE_SEARCH),
         switchMap((search: SearchActions.MovieSearch) => {
@@ -44,7 +69,7 @@ export class SearchEffects {
                 });
                 return new SearchActions.MovieSearchResults({
                     results_found: numResults,
-                    results_list: searchResults
+                    results_list: searchResults,
                 });
             }),
             catchError(errorResponse => {
@@ -67,16 +92,18 @@ export class SearchEffects {
                         release_date: result.release_date
                     }
                 });
-                return new SearchActions.MovieSearchResults({
-                    results_found: numResults,
-                    results_list: searchResults
-                });
+                return new SearchActions.UpdatePage(searchResults);
             }),
             catchError(errorResponse => {
                 return handleError(errorResponse);
             }))
         })
     ));
+
+    selectFirstResult = createEffect(() => this.actions$.pipe(
+        ofType(SearchActions.MOVIE_SEARCH_RESULTS),
+        map((searchResults: SearchActions.MovieSearchResults) => new SearchActions.MovieSelect(searchResults.payload.results_list[0].id))
+    ))
 
     getMovieDetails = createEffect(() => this.actions$.pipe(
         ofType(SearchActions.MOVIE_SELECT),
@@ -124,6 +151,7 @@ export class SearchEffects {
         })
     ));
 
+    // get data to enable or disable the watchlist button for a newly selected movie
     updateWatchlist = createEffect(() => this.actions$.pipe(
         ofType(SearchActions.MOVIE_SELECT_DETAILS),
         map(() => new WatchlistActions.GetUpdatedWatchlist())
