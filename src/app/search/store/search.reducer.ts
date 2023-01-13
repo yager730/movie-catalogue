@@ -3,6 +3,7 @@ import { SearchResult } from "../search-result.model";
 import * as SearchActions from "./search.actions";
 
 export interface State {
+    searchTerm: string;
     results: SearchResult [];
     numResults: number;
     selectedMovie: number;
@@ -12,6 +13,7 @@ export interface State {
 }
 
 const initState: State = {
+    searchTerm: null,
     results: null,
     numResults: 0,
     selectedMovie: null,
@@ -26,6 +28,11 @@ const initState: State = {
 
 export function searchReducer(state: State = initState, action: SearchActions.SearchActions) {
     switch (action.type) {
+        case SearchActions.MOVIE_SEARCH_TERM_UPDATE:
+            return {
+                ...state,
+                searchTerm: action.payload
+            };
         case SearchActions.MOVIE_SEARCH:
             return {
                 ...state,
@@ -39,6 +46,10 @@ export function searchReducer(state: State = initState, action: SearchActions.Se
                 numResults: action.payload.results_found,
                 apiError: null,
                 loading: false
+            };
+        case SearchActions.VIEW_SEARCH_RESULTS_PAGE:
+            return {
+                ...state,
             };
         case SearchActions.SEARCH_ERROR:
             return {

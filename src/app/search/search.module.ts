@@ -4,7 +4,7 @@ import { SearchComponent } from "./search.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MovieDetailsComponent } from './movie-details/movie-details.component';
 import { MovieResultsListComponent } from './movie-results-list/movie-results-list.component';
 import { MatIconModule } from "@angular/material/icon";
@@ -27,6 +27,7 @@ const routes: Routes =[
     ],
     imports: [
         CommonModule,
+        FormsModule,
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,

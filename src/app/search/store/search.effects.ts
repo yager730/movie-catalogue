@@ -32,7 +32,32 @@ export class SearchEffects {
         ofType(SearchActions.MOVIE_SEARCH),
         switchMap((search: SearchActions.MovieSearch) => {
             return this.http.get<SearchResponseData>(baseURL + '/search/movie?api_key=' + environment.TMDB_API_key 
-            + '&language=en-US&include_adult=false&query=' + search.payload.replace(" ", "%20"))
+            + '&page=1&language=en-US&include_adult=false&query=' + search.payload.replace(" ", "%20"))
+            .pipe(map(resData => {
+                const numResults = resData.total_results;
+                const searchResults = resData.results.map(result => {
+                    return {
+                        id: result.id, 
+                        title: result.title, 
+                        release_date: result.release_date
+                    }
+                });
+                return new SearchActions.MovieSearchResults({
+                    results_found: numResults,
+                    results_list: searchResults
+                });
+            }),
+            catchError(errorResponse => {
+                return handleError(errorResponse);
+            }))
+        })
+    ));
+
+    viewResultsPage = createEffect(() => this.actions$.pipe(
+        ofType(SearchActions.VIEW_SEARCH_RESULTS_PAGE),
+        switchMap((searchData: SearchActions.ViewResultsPage) => {
+            return this.http.get<SearchResponseData>(baseURL + '/search/movie?api_key=' + environment.TMDB_API_key 
+            + '&page=' + searchData.payload.page_number + '&language=en-US&include_adult=false&query=' + searchData.payload.search_term.replace(" ", "%20"))
             .pipe(map(resData => {
                 const numResults = resData.total_results;
                 const searchResults = resData.results.map(result => {

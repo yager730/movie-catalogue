@@ -8,6 +8,7 @@
                 type="text"
                 id="searchTerm"
                 formControlName="searchTerm"
+                [(ngModel)]="currentSearchTerm"
                 class="form-control">
                 <mat-icon matPrefix style="font-size: 1.2em" (click)="onSubmit()">search</mat-icon>
             </mat-form-field>
@@ -20,12 +21,12 @@
             <app-movie-results-list *ngFor="let result of searchResults"
                 [movieResult]="result">
             </app-movie-results-list>
-            <mat-paginator 
-                *ngIf="numResults > 20"
-                style="margin-top: 3%;"
-                [length]="100"
+            <mat-paginator #paginator *ngIf="numResults > 20"
+                style="margin-top: 3%; border-radius: 5px;"
+                [length]="numResults"
                 [pageSize]="20"
-                aria-label="Select page">
+                aria-label="Select page"
+                (page)="handlePagination($event)">
             </mat-paginator>
             <br />
         </div>
@@ -43,4 +44,3 @@
         <h2>Please enter a search term to begin.</h2>
     </ng-template>
 </div>
-
