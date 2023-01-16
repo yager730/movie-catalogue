@@ -24,7 +24,8 @@ export function watchlistReducer(state: State = initState, action: WatchlistActi
             };
         case WatchlistActions.REMOVE_FILM:
             return {
-                ...state
+                ...state,
+                films: [...state.films.filter(item => item.movieDetails.id !== action.payload)]
             };
         default:
             return state;

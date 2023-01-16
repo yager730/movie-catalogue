@@ -12,6 +12,7 @@
 
 .mat-mdc-raised-button.filter-search-button {
     margin-right: 1%;
+    /* background-color: #c2185c; */
     background-color: #c2185ca4;
 }
 
