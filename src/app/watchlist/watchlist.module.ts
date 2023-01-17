@@ -1,13 +1,7 @@
-import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { WatchlistComponent } from "./watchlist.component";
-import { MatTableModule } from "@angular/material/table";
-import { MatCardModule } from "@angular/material/card";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatSortModule } from "@angular/material/sort";
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes =[
     { path: '', component: WatchlistComponent }
@@ -18,13 +12,7 @@ const routes: Routes =[
         WatchlistComponent
     ],
     imports: [
-        CommonModule,
-        MatTableModule,
-        MatCardModule,
-        MatSlideToggleModule,
-        MatButtonModule,
-        MatIconModule,
-        MatSortModule,
+        SharedModule,
         RouterModule.forChild(routes)
     ]
 })
