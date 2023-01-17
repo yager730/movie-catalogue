@@ -8,7 +8,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import * as WatchlistActions from './store/watchlist.actions';
 import { MatTableDataSource } from '@angular/material/table';
 
-function compare(a: number | string, b: number | string, isAsc: boolean) {
+function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
 
@@ -58,7 +58,7 @@ export class WatchlistComponent implements OnInit {
         case 'director':
           return compare(this.getDirector(a), this.getDirector(b), isAsc);
         case 'date':
-          return compare(this.getReleaseDate(a), this.getReleaseDate(b), isAsc);
+          return compare(new Date(b.movieDetails.release_date), new Date(a.movieDetails.release_date), isAsc);
         case 'rating':
           return compare(this.getRating(b), this.getRating(a), isAsc);
         default:
