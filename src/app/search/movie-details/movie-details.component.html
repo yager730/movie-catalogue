@@ -27,7 +27,7 @@
                 <ngb-carousel *ngIf="movieImages" [showNavigationIndicators]="false">
                     <ng-template ngbSlide *ngFor="let image of movieImages">
                         <div>
-                            <img src="{{ image }}" alt="Associated film image" style="max-width: 100%; opacity: 70%;"/>
+                            <img src="{{ image }}" alt="Associated film image" style="max-width: 100%; opacity: 70%; border-radius: 5px;"/>
                         </div>
                     </ng-template>
                 </ngb-carousel>

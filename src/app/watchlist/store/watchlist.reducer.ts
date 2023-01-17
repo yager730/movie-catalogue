@@ -3,12 +3,10 @@ import * as WatchlistActions from "./watchlist.actions";
 
 export interface State {
     films: movieInfo[];
-    selectedFilmIndex: number;
 }
 
 const initState: State = {
-    films: [],
-    selectedFilmIndex: -1
+    films: []
 };
 
 export function watchlistReducer(state: State = initState, action: WatchlistActions.WatchlistActions) {

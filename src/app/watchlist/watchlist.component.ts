@@ -1,12 +1,16 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
 import { movieInfo } from '../shared/movie-info.model';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 
 import * as WatchlistActions from './store/watchlist.actions';
+import { MatTableDataSource } from '@angular/material/table';
 
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
 
 @Component({
   selector: 'app-watchlist',
@@ -14,9 +18,12 @@ import * as WatchlistActions from './store/watchlist.actions';
   styleUrls: ['./watchlist.component.css'],
 })
 export class WatchlistComponent implements OnInit {
-  watchlistMovies: Observable<{ films: movieInfo[] }>;
+  watchlistSubscription: Subscription;
+  watchlistDataSource: MatTableDataSource<movieInfo> = new MatTableDataSource<movieInfo>();
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  sortedData: movieInfo[];
   
-  tableView = true;
+  tableView = false;
   tableDisplayCols = ['title', 'director', 'date', 'rating', 'options'];
 
   constructor(
@@ -24,12 +31,40 @@ export class WatchlistComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.watchlistMovies = this.store.select('watchlist');
+    this.watchlistSubscription = this.store.select('watchlist')
+    .subscribe(state => {
+      this.watchlistDataSource.data = state.films;
+      this.sortedData = this.watchlistDataSource.data.slice();
+    })
   }
 
   switchView() {
     this.tableView = !this.tableView;
     console.log(this.tableView ? 'switched to table view' : 'switched to watchlist view');
+  }
+
+  sortData(sort: Sort) {
+    const data = this.watchlistDataSource.data.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
+
+    this.sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'title':
+          return compare(a.movieDetails.title, b.movieDetails.title, isAsc);
+        case 'director':
+          return compare(this.getDirector(a), this.getDirector(b), isAsc);
+        case 'date':
+          return compare(this.getReleaseDate(a), this.getReleaseDate(b), isAsc);
+        case 'rating':
+          return compare(this.getRating(b), this.getRating(a), isAsc);
+        default:
+          return 0;
+      }
+    });
   }
 
   getDirector(film: movieInfo) {

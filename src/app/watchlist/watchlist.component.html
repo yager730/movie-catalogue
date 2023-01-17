@@ -1,7 +1,7 @@
 <div class="container">
-    <div class="row" *ngIf="(watchlistMovies | async).films.length > 0; else noFilms">
+    <div class="row" *ngIf="watchlistDataSource.data.length > 0; else noFilms">
 
-        <div class="col-12" style="margin: 3% 0% 3% 0%;">
+        <div class="col-12" style="margin: 3% 0% 1% 0%;">
             <h1 style="display: inline;">My Watchlist</h1>
             <mat-slide-toggle class="example-margin" style="float: right;" labelPosition="before" color="primary" 
                 [checked]="tableView" (change)="switchView()"> View Watchlist in Table &nbsp;
@@ -9,7 +9,7 @@
         </div>
 
         <ng-container *ngIf="!tableView">
-            <div *ngFor="let film of (watchlistMovies | async).films;" class="col-2">
+            <div *ngFor="let film of watchlistDataSource.data" class="col-2">
                 <mat-card style="margin-top: 5%;" class="watchlist-movie-card">
                     <img src="{{ film.movieDetails?.poster }}" alt="{{ film.movieDetails?.title }}" style="max-width: 100%;"/>
                     <span class="action-options-overlay">
@@ -25,25 +25,26 @@
         </ng-container>
 
         <div *ngIf="tableView" class="col-12" style="margin-top: 1%;">
-            <table mat-table [dataSource]="(watchlistMovies | async).films" class="mat-elevation-z8">
+            <table mat-table [dataSource]="sortedData" matSort (matSortChange)="sortData($event)"
+                class="mat-elevation-z8" style="margin-bottom: 5%;">
                 
                 <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef>Title</th>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef>Title</th>
                     <td mat-cell *matCellDef="let film"> {{ film.movieDetails.title }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="director">
-                    <th mat-header-cell *matHeaderCellDef> Director </th>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Director </th>
                     <td mat-cell *matCellDef="let film"> {{ getDirector(film) }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="date">
-                    <th mat-header-cell *matHeaderCellDef> Date </th>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Date </th>
                     <td mat-cell *matCellDef="let film"> {{ getReleaseDate(film) }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="rating">
-                    <th mat-header-cell *matHeaderCellDef> Rating </th>
+                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Rating </th>
                     <td mat-cell *matCellDef="let film"> {{ getRating(film) }} </td>
                 </ng-container>
 
