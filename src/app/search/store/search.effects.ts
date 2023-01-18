@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { catchError, map, of, switchMap } from 'rxjs';
+import { catchError, forkJoin, map, of, switchMap } from 'rxjs';
 import { environment } from 'src/environments/environments';
 import { CrewResponseData, MovieDetailsResponseData, MovieImagesResponseData, SearchResponseData } from './api-response.interfaces';
 
@@ -13,14 +13,14 @@ const baseURL = 'https://api.themoviedb.org/3';
 const handleError = (errorResponse: any) => {
     let errorMessage = 'An unkown error has occurred';
     if (!errorResponse.error || !errorResponse.error.error) {
-        return of(new SearchActions.SearchError(errorMessage));
+        return of(new SearchActions.DisplaySearchError(errorMessage));
     }
     switch (errorResponse.error.error.message) {
         case 'NO_SEARCH_TERM_ENTERED':
             errorMessage = 'Please Enter A Search Term';
             break;
     }
-    return of(new SearchActions.SearchError(errorMessage));
+    return of(new SearchActions.DisplaySearchError(errorMessage));
 };
 
 @Injectable()
@@ -28,7 +28,7 @@ export class SearchEffects {
 
     constructor(private actions$: Actions, private http: HttpClient) {}
 
-    // Get top 20 results for popular movies
+    // Get top 15 results for popular movies
     fetchPopularMovies = createEffect(() => this.actions$.pipe(
         ofType(SearchActions.FETCH_MOVIES),
         switchMap((filter: SearchActions.FetchMovies) => {
@@ -42,7 +42,7 @@ export class SearchEffects {
                         release_date: result.release_date
                     }
                 });
-                return new SearchActions.MovieSearchResults({
+                return new SearchActions.YieldSearchResults({
                     results_found: 15,
                     results_list: searchResults.slice(0, 15)
                 });
@@ -54,8 +54,8 @@ export class SearchEffects {
     ));
 
     movieSearch = createEffect(() => this.actions$.pipe(
-        ofType(SearchActions.MOVIE_SEARCH),
-        switchMap((search: SearchActions.MovieSearch) => {
+        ofType(SearchActions.INITIATE_SEARCH),
+        switchMap((search: SearchActions.SearchForTerm) => {
             return this.http.get<SearchResponseData>(baseURL + '/search/movie?api_key=' + environment.TMDB_API_key 
             + '&page=1&language=en-US&include_adult=false&query=' + search.payload.replace(" ", "%20"))
             .pipe(map(resData => {
@@ -67,7 +67,7 @@ export class SearchEffects {
                         release_date: result.release_date
                     }
                 });
-                return new SearchActions.MovieSearchResults({
+                return new SearchActions.YieldSearchResults({
                     results_found: numResults,
                     results_list: searchResults,
                 });
@@ -92,7 +92,7 @@ export class SearchEffects {
                         release_date: result.release_date
                     }
                 });
-                return new SearchActions.UpdatePage(searchResults);
+                return new SearchActions.UpdateSearchResultsPage(searchResults);
             }),
             catchError(errorResponse => {
                 return handleError(errorResponse);
@@ -101,59 +101,45 @@ export class SearchEffects {
     ));
 
     selectFirstResult = createEffect(() => this.actions$.pipe(
-        ofType(SearchActions.MOVIE_SEARCH_RESULTS),
-        map((searchResults: SearchActions.MovieSearchResults) => new SearchActions.MovieSelect(searchResults.payload.results_list[0].id))
+        ofType(SearchActions.YIELD_SEARCH_RESULTS),
+        map((searchResults: SearchActions.YieldSearchResults) => new SearchActions.SelectMovie(searchResults.payload.results_list[0].id))
     ))
 
-    getMovieDetails = createEffect(() => this.actions$.pipe(
-        ofType(SearchActions.MOVIE_SELECT),
-        switchMap((selectedMovie: SearchActions.MovieSelect) => {
-            return this.http.get<MovieDetailsResponseData>(baseURL + '/movie/' + selectedMovie.payload + 
-            '?api_key=' + environment.TMDB_API_key + '&language=en-US')
+    getMovieInfo = createEffect(() => this.actions$.pipe(
+        ofType(SearchActions.SELECT_MOVIE),
+        switchMap((selectedMovie: SearchActions.SelectMovie) => {
+            return forkJoin({
+                details: this.http.get<MovieDetailsResponseData>(baseURL + '/movie/' + selectedMovie.payload + 
+                    '?api_key=' + environment.TMDB_API_key + '&language=en-US'),
+                crew: this.http.get<CrewResponseData>(baseURL + '/movie/' + selectedMovie.payload + 
+                    '/credits?api_key=' + environment.TMDB_API_key + '&language=en-US'),
+                images: this.http.get<MovieImagesResponseData>(baseURL + '/movie/' + selectedMovie.payload + 
+                    '/images?api_key=' + environment.TMDB_API_key + '&language=en-US&include_image_language=en%2Cnull') })
             .pipe(map(resData => {
-                return new SearchActions.SelectedMovieDetails({
-                    id: resData.id,
-                    title: resData.title,
-                    tagline: resData.tagline,
-                    runtime: resData.runtime,
-                    release_date: resData.release_date,
-                    score: resData.vote_average,
-                    poster: resData.poster_path ? 'https://image.tmdb.org/t/p/original' + resData.poster_path : null,
-                    overview: resData.overview
+                const movieDetails = {
+                    id: resData.details.id,
+                    title: resData.details.title,
+                    tagline: resData.details.tagline,
+                    runtime: resData.details.runtime,
+                    release_date: resData.details.release_date,
+                    score: resData.details.vote_average,
+                    poster: resData.details.poster_path ? 'https://image.tmdb.org/t/p/original' + resData.details.poster_path : null,
+                    overview: resData.details.overview
+                }
+                const crewData = { cast: resData.crew.cast, crew: resData.crew.crew }
+                const image_paths = resData.images.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
+                return new SearchActions.GetSelectedMovieInfo({
+                    movieDetails: movieDetails,
+                    movieCrew: crewData,
+                    movieImagePaths: image_paths
                 });
             }));
         })
-    ));
-
-    getMovieCrew = createEffect(() => this.actions$.pipe(
-        ofType(SearchActions.MOVIE_SELECT),
-        switchMap((selectedMovie: SearchActions.MovieSelect) => {
-            return this.http.get<CrewResponseData>(baseURL + '/movie/' + selectedMovie.payload + 
-            '/credits?api_key=' + environment.TMDB_API_key + '&language=en-US')
-            .pipe(map(resData => {
-                return new SearchActions.SelectedMovieCrew({
-                    cast: resData.cast,
-                    crew: resData.crew 
-                });
-            }));
-        })
-    ));
-
-    getMovieImages = createEffect(() => this.actions$.pipe(
-        ofType(SearchActions.MOVIE_SELECT),
-        switchMap((selectedMovie: SearchActions.MovieSelect) => {
-            return this.http.get<MovieImagesResponseData>(baseURL + '/movie/' + selectedMovie.payload + 
-            '/images?api_key=' + environment.TMDB_API_key + '&language=en-US&include_image_language=en%2Cnull')
-            .pipe(map(resData => {
-                const image_paths = resData.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
-                return new SearchActions.SelectedMovieImages(image_paths);
-            }));
-        })
-    ));
+    ))
 
     // get data to enable or disable the watchlist button for a newly selected movie
     updateWatchlist = createEffect(() => this.actions$.pipe(
-        ofType(SearchActions.MOVIE_SELECT_DETAILS),
+        ofType(SearchActions.GET_SELECTED_MOVIE_INFO),
         map(() => new WatchlistActions.GetUpdatedWatchlist())
     ))
 }

@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
 import { movieInfo } from '../shared/movie-info.model';
 import { MatSort, Sort } from '@angular/material/sort';
@@ -17,7 +17,7 @@ function compare(a: number | string | Date, b: number | string | Date, isAsc: bo
   templateUrl: './watchlist.component.html',
   styleUrls: ['./watchlist.component.css'],
 })
-export class WatchlistComponent implements OnInit {
+export class WatchlistComponent implements OnInit, OnDestroy {
   watchlistSubscription: Subscription;
   watchlistDataSource: MatTableDataSource<movieInfo> = new MatTableDataSource<movieInfo>();
   @ViewChild(MatSort, {static: false}) sort: MatSort;
@@ -56,7 +56,8 @@ export class WatchlistComponent implements OnInit {
         case 'title':
           return compare(a.movieDetails.title, b.movieDetails.title, isAsc);
         case 'director':
-          return compare(this.getDirector(a), this.getDirector(b), isAsc);
+          console.log(this.getDirector(a));
+          return compare(this.getDirector(a).split(' ').slice(-1)[0], this.getDirector(b).split(' ').slice(-1)[0], isAsc);
         case 'date':
           return compare(new Date(b.movieDetails.release_date), new Date(a.movieDetails.release_date), isAsc);
         case 'rating':
@@ -76,7 +77,7 @@ export class WatchlistComponent implements OnInit {
   getReleaseDate(film: movieInfo) {
     if (film.movieDetails.release_date) {
       const date = new Date(film.movieDetails.release_date);
-      return date.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric"})
+      return date.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric" })
     } else { return 'n/a' }
   }
 
@@ -87,5 +88,8 @@ export class WatchlistComponent implements OnInit {
   removeWatchlistItem(film: movieInfo) {
     this.store.dispatch(new WatchlistActions.RemoveFromWatchlist(film.movieDetails.id));
   }
-  
+
+  ngOnDestroy() {
+    this.watchlistSubscription.unsubscribe();
+  }
 }

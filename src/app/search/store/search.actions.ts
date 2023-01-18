@@ -1,18 +1,16 @@
 import { Action } from "@ngrx/store";
-import { MovieDetails, MovieCrew } from "../../shared/movie-info.model";
+import { movieInfo } from "../../shared/movie-info.model";
 import { SearchResult } from "../search-result.model";
 
 export const FETCH_MOVIES = '[Search] Fetch Movies'
-export const MOVIE_SEARCH_TERM_UPDATE = '[Search] Search Term Update';
-export const MOVIE_SEARCH = '[Search] Search';
-export const MOVIE_SEARCH_RESULTS = '[Search] Search Results';
+export const UPDATE_SEARCH_TERM = '[Search] Update Search Term';
+export const INITIATE_SEARCH = '[Search] Initiate Search';
+export const YIELD_SEARCH_RESULTS = '[Search] Yield Search Results';
 export const VIEW_SEARCH_RESULTS_PAGE = '[Search] View Search Results Page';
-export const PAGE_UPDATE = '[Search] Page Update'
-export const MOVIE_SELECT = '[Search] Select';
-export const MOVIE_SELECT_DETAILS = '[Search] Select Details';
-export const MOVIE_SELECT_CREW = '[Search] Select Crew';
-export const MOVIE_SELECT_IMAGES = '[Search] Select Images';
-export const SEARCH_ERROR = '[Search] Search Error';
+export const UPDATE_SEARCH_RESULTS_PAGE = '[Search] Update Search Results Page'
+export const SELECT_MOVIE = '[Search] Select Movie';
+export const GET_SELECTED_MOVIE_INFO = '[Search] Get Selected Movie Info';
+export const SHOW_SEARCH_ERROR = '[Search] Show Search Error';
 
 export class FetchMovies implements Action {
     readonly type = FETCH_MOVIES;
@@ -20,18 +18,23 @@ export class FetchMovies implements Action {
 }
 
 export class UpdateSearchTerm implements Action {
-    readonly type= MOVIE_SEARCH_TERM_UPDATE;
+    readonly type= UPDATE_SEARCH_TERM;
     constructor(public payload: string) {}
 }
 
-export class MovieSearch implements Action {
-    readonly type = MOVIE_SEARCH;
+export class SearchForTerm implements Action {
+    readonly type = INITIATE_SEARCH;
     constructor(public payload: string) {}
 }
 
-export class MovieSearchResults implements Action {
-    readonly type = MOVIE_SEARCH_RESULTS;
+export class YieldSearchResults implements Action {
+    readonly type = YIELD_SEARCH_RESULTS;
     constructor(public payload: { results_found: number; results_list: SearchResult[] }) {}
+}
+
+export class DisplaySearchError implements Action {
+    readonly type = SHOW_SEARCH_ERROR;
+    constructor(public payload: string) {}
 }
 
 export class ViewResultsPage implements Action {
@@ -39,36 +42,23 @@ export class ViewResultsPage implements Action {
     constructor(public payload: { page_number: number, search_term: string }) {}
 }
 
-export class UpdatePage implements Action {
-    readonly type = PAGE_UPDATE;
+export class UpdateSearchResultsPage implements Action {
+    readonly type = UPDATE_SEARCH_RESULTS_PAGE;
     constructor(public payload: SearchResult[]) {}
 }
 
-export class SearchError implements Action {
-    readonly type = SEARCH_ERROR;
-    constructor(public payload: string) {}
-}
-
-export class MovieSelect implements Action {
-    readonly type = MOVIE_SELECT;
+export class SelectMovie implements Action {
+    readonly type = SELECT_MOVIE;
     constructor(public payload: number) {}
 }
 
-export class SelectedMovieDetails implements Action {
-    readonly type = MOVIE_SELECT_DETAILS;
-    constructor(public payload: MovieDetails) {}
-}
-
-export class SelectedMovieCrew implements Action {
-    readonly type = MOVIE_SELECT_CREW;
-    constructor(public payload: MovieCrew) {}
-}
-
-export class SelectedMovieImages implements Action {
-    readonly type = MOVIE_SELECT_IMAGES;
-    constructor(public payload: string []) {}
+export class GetSelectedMovieInfo implements Action {
+    readonly type= GET_SELECTED_MOVIE_INFO;
+    constructor(public payload: movieInfo) {}
 }
 
 export type SearchActions = 
-    UpdateSearchTerm | UpdatePage | MovieSearch | MovieSearchResults | SearchError | ViewResultsPage |
-    FetchMovies | MovieSelect | SelectedMovieDetails | SelectedMovieCrew | SelectedMovieImages
+    FetchMovies | 
+    SearchForTerm | UpdateSearchTerm |YieldSearchResults | DisplaySearchError |
+    ViewResultsPage | UpdateSearchResultsPage |
+    SelectMovie | GetSelectedMovieInfo

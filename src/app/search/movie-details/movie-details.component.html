@@ -1,3 +1,6 @@
+<app-loading-spinner *ngIf="detailsLoaded; else detailsCard" style="display: flex; margin: auto;"></app-loading-spinner>
+
+<ng-template #detailsCard>
 <mat-card style="margin-bottom: 5%;">
     <mat-card-header style="background-image: linear-gradient( #c2185ca4, #424242);">
         <mat-card-title>{{ movieDetails?.title }} {{ movieDetails?.release_date ? '(' + movieDetails?.release_date.substring(0,4) + ')' : '' }}</mat-card-title>
@@ -16,7 +19,8 @@
                         *ngIf="!onWatchlist; else disabledButton"
                         (click)="addToWatchlist()"><mat-icon>add</mat-icon>Add to Watchlist</button>
                     <ng-template #disabledButton>
-                        <button mat-raised-button disabled style="margin: 3% 0% 3% 0%;" >
+                        <button mat-raised-button disabled style="margin: 3% 0% 3% 0%;"
+                        matTooltip="Remove from watchlist page">
                         <mat-icon>check</mat-icon>Added to Watchlist</button>
                     </ng-template>
                 </div>
@@ -46,3 +50,4 @@
         </div>
     </div>
 </mat-card>
+</ng-template>

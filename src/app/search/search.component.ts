@@ -40,15 +40,13 @@ export class SearchComponent implements OnInit, OnDestroy {
         this.movieSelected = results.selectedMovie;
     });
     this.store.dispatch(new SearchActions.FetchMovies('popular'));
-    //console.log(this.searchResults);
-    //this.store.dispatch(new SearchActions.MovieSelect(this.searchResults[0].id));
   }
 
   onSubmit() {
     this.displaying = 'Search';
     this.store.dispatch(new SearchActions.UpdateSearchTerm(this.currentSearchTerm));
-    this.store.dispatch(new SearchActions.MovieSearch(this.currentSearchTerm));
-    this.paginator.firstPage();
+    this.store.dispatch(new SearchActions.SearchForTerm(this.currentSearchTerm));
+    if (this.numResults > 20) { this.paginator.firstPage(); }
   }
 
   showMovies(filter: 'top_rated' | 'popular' | 'upcoming') {

@@ -10,6 +10,7 @@ export interface State {
     movieInfo: movieInfo;
     apiError: string;
     loading: boolean;
+    movieDataLoading: boolean;
 }
 
 const initState: State = {
@@ -23,7 +24,8 @@ const initState: State = {
         movieImagePaths: null
     },
     apiError: null,
-    loading: false
+    loading: false,
+    movieDataLoading: true
 };
 
 export function searchReducer(state: State = initState, action: SearchActions.SearchActions) {
@@ -32,23 +34,23 @@ export function searchReducer(state: State = initState, action: SearchActions.Se
             return {
                 ...state
             };
-        case SearchActions.PAGE_UPDATE:
+        case SearchActions.UPDATE_SEARCH_RESULTS_PAGE:
             return {
                 ...state,
                 results: action.payload
             }
-        case SearchActions.MOVIE_SEARCH_TERM_UPDATE:
+        case SearchActions.UPDATE_SEARCH_TERM:
             return {
                 ...state,
                 searchTerm: action.payload
             };
-        case SearchActions.MOVIE_SEARCH:
+        case SearchActions.INITIATE_SEARCH:
             return {
                 ...state,
                 apiError: null,
                 loading: true
             };
-        case SearchActions.MOVIE_SEARCH_RESULTS:
+        case SearchActions.YIELD_SEARCH_RESULTS:
             return {
                 ...state,
                 results: action.payload.results_list,
@@ -60,7 +62,7 @@ export function searchReducer(state: State = initState, action: SearchActions.Se
             return {
                 ...state,
             };
-        case SearchActions.SEARCH_ERROR:
+        case SearchActions.SHOW_SEARCH_ERROR:
             return {
                 ...state,
                 results: null,
@@ -68,38 +70,18 @@ export function searchReducer(state: State = initState, action: SearchActions.Se
                 apiError: action.payload,
                 loading: false
             }
-        case SearchActions.MOVIE_SELECT:
+        case SearchActions.SELECT_MOVIE:
             console.log(state.results);
             return {
                 ...state,
+                movieDataLoading: true,
                 selectedMovie: action.payload
             }
-        case SearchActions.MOVIE_SELECT_DETAILS:
-            console.log(action.payload);
+        case SearchActions.GET_SELECTED_MOVIE_INFO:
             return {
                 ...state,
-                movieInfo: {
-                    ...state.movieInfo,
-                    movieDetails: action.payload
-                } 
-            }
-        case SearchActions.MOVIE_SELECT_CREW:
-            console.log(action.payload);
-            return {
-                ...state,
-                movieInfo: {
-                    ...state.movieInfo,
-                    movieCrew: action.payload
-                } 
-            }
-        case SearchActions.MOVIE_SELECT_IMAGES:
-            console.log(action.payload);
-            return {
-                ...state,
-                movieInfo: {
-                    ...state.movieInfo,
-                    movieImagePaths: action.payload
-                } 
+                movieDataLoading: false,
+                movieInfo: action.payload
             }
         default:
             return state;

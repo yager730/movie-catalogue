@@ -1,6 +1,8 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
+import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
+
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from "@angular/material/icon";
@@ -16,8 +18,12 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
+    declarations: [
+        LoadingSpinnerComponent
+    ],
     exports: [
         CommonModule,
+        LoadingSpinnerComponent,
         MatButtonModule, 
         MatCardModule, 
         MatIconModule,

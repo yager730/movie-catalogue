@@ -12,6 +12,8 @@ import { MovieCrew, MovieDetails } from '../../shared/movie-info.model';
   styleUrls: ['./movie-details.component.css']
 })
 export class MovieDetailsComponent implements OnInit, OnDestroy {
+  detailsLoaded = true;
+  
   @Input() movie: number;
   movieInfoSubscription: Subscription;
   watchlistSubscription: Subscription;
@@ -30,10 +32,12 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     this.movieInfoSubscription = this.store.select('search')
     .pipe(map(searchState => searchState))
     .subscribe((results) => {
+      this.detailsLoaded = results.movieDataLoading;
       this.movieDetails = results.movieInfo.movieDetails;
       this.movieCrew = results.movieInfo.movieCrew;
       this.movieImages = results.movieInfo.movieImagePaths;
-      this.director = results.movieInfo.movieCrew?.crew.filter(el => el.job === 'Director')[0].name;
+      this.director = results.movieInfo.movieCrew?.crew.map(el => el.job).includes('Director') ? 
+        results.movieInfo.movieCrew?.crew.filter(el => el.job === 'Director')[0].name : 'n/a';
       this.rating = Math.round(results.movieInfo.movieDetails?.score * 100) / 100;
     });
     this.watchlistSubscription = this.store.select('watchlist')

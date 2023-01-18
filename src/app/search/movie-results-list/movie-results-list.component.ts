@@ -28,6 +28,7 @@ export class MovieResultsListComponent {
 
   onClick() {
     console.log("Clicked movie with ID:" + this.movieResult.id)
-    this.store.dispatch(new SearchActions.MovieSelect(this.movieResult.id));
+    if (this.movieResult.id === this.movieSelected) { return }
+    this.store.dispatch(new SearchActions.SelectMovie(this.movieResult.id));
   }
 }
