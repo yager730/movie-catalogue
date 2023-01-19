@@ -1,7 +1,10 @@
 <mat-toolbar color="primary">
-  <span>Movies</span>
+  <!-- <img src="assets/images/film-reel.png" alt="logo" style="max-height: 80%; opacity: 80%;"/> -->
+  <span class="app-title-text">Movie Catalogue</span>
+  <span style="flex: 1 1 auto;"></span>
+  <app-auth style="display: flex; align-items: center;"></app-auth>
 </mat-toolbar>
-
+  
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav"
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"

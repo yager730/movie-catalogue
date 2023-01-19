@@ -15,11 +15,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import * as fromApp from './store/app.reducer';
 import { SearchEffects } from './search/store/search.effects';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MainNavComponent
+    MainNavComponent,
+    AuthComponent
   ],
   imports: [
     AppRoutingModule,
