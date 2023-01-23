@@ -1,4 +1,3 @@
-import { GetSelectedMovieInfo } from "src/app/search/store/search.actions";
 import { movieInfo } from "src/app/shared/movie-info.model";
 import * as WatchlistActions from "./watchlist.actions";
 
@@ -22,6 +21,11 @@ export function watchlistReducer(state: State = initState, action: WatchlistActi
             return {
                 ...state,
                 films: action.payload
+            }
+        case WatchlistActions.CLEAR_WATCHLIST:
+            return {
+                ...state,
+                films: []
             }
         case WatchlistActions.ADD_FILM:
             return {

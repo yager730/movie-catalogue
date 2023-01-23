@@ -41,3 +41,4 @@ export class Logout implements Action {
 export type AuthActions = 
     InitiateLogin | InitiateSignUp |
     Login | LoginFailure | Logout
+    

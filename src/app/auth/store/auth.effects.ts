@@ -102,8 +102,16 @@ export class AuthEffects {
     getWatchlist = createEffect(() => this.actions$.pipe(
         ofType(AuthActions.LOGIN),
         map((loginInfo: AuthActions.Login) => {
-            console.log('Fetching user watchlist...')
+            console.log('Fetching user watchlist...');
             return new WatchlistActions.FetchUserWatchlist(loginInfo.payload.userId);
+        })
+    ));
+
+    clearWatchlistOnLogout = createEffect(() => this.actions$.pipe(
+        ofType(AuthActions.LOGOUT),
+        map(() => {
+            console.log('User logging out. Clearing user watchlist data');
+            return new WatchlistActions.ClearWatchlist();
         })
     ));
 }
