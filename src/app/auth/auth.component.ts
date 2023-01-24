@@ -37,6 +37,21 @@ export class AuthComponent implements OnInit, OnDestroy {
     })
   }
 
+  getErrorMessage(control: string) {
+    switch(control) {
+      case 'email':
+        if (this.userAuthForm.controls['email'].hasError('required')) {
+          return 'Email required';
+        } else { return this.userAuthForm.controls['email'].hasError('email') ? 'Not a valid email' : ''; }
+      case 'password':
+        if (this.userAuthForm.controls['password'].hasError('required')){
+          return 'Password required'
+        } else { return this.userAuthForm.controls['password'].hasError('minlength') ? 'Must be at least 6 characters' : ''; }
+      default:
+        return ''
+    }
+  }
+
   switchToSignUp() {
     this.loginMode = "Sign Up";
   }
@@ -47,25 +62,35 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   goBack() {
     this.loginMode = null;
+    this.userAuthForm.reset();
   }
 
   logout() {
     this.store.dispatch(new AuthActions.Logout());
     this.loginMode = null;
+    this.userAuthForm.reset();
   }
 
   onSubmit() {
     console.log(this.userAuthForm.value);
+    console.log(this.userAuthForm.valid);
+    if (!this.userAuthForm.valid){
+      return;
+    }
     if (this.loginMode === 'Sign Up') { 
       this.store.dispatch(new AuthActions.InitiateSignUp(this.userAuthForm.value)); 
     } else { 
       this.store.dispatch(new AuthActions.InitiateLogin(this.userAuthForm.value)); 
     }
-    this.userAuthForm.reset();
   }
 
   onAcknowledgeError(){
     this.store.dispatch(new AuthActions.HandleError());
+    this.userAuthForm.controls['password'].reset();
+    // After acknowledging error, when user goes back to input and enters a character, 
+    // the user receives an error message even if you haven't clicked out of the input
+    // This is because mat-error reads the ng-submitted class in the form element
+    this.userAuthForm.controls['password'].setErrors(null);
   }
 
   ngOnDestroy() {
