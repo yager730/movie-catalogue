@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
+import { AlertComponent } from "./alert/alert.component";
 import { LoadingSpinnerComponent } from "./loading-spinner/loading-spinner.component";
 
 import { MatButtonModule } from "@angular/material/button";
@@ -19,10 +20,15 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
     declarations: [
+        AlertComponent,
         LoadingSpinnerComponent
+    ],
+    imports: [
+        MatButtonModule
     ],
     exports: [
         CommonModule,
+        AlertComponent,
         LoadingSpinnerComponent,
         MatButtonModule, 
         MatCardModule, 

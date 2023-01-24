@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { catchError, map, of, switchMap, tap } from 'rxjs';
+import { catchError, map, of, switchMap, take, tap } from 'rxjs';
 import { environment } from 'src/environments/environments';
 
 import * as AuthActions from './auth.actions';
@@ -9,18 +9,28 @@ import { User } from '../user.model';
 import { AuthService, AuthResponseData } from '../auth.service';
 import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
 
-const handleAuthentication = (expiresIn: number, email: string, userId: string, token: string) => {
+const handleAuthentication = (expiresIn: number, email: string, userId: string, token: string, newUser: boolean = false) => {
     const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
     const user = new User(email, userId, token, expirationDate);
     localStorage.setItem('userData', JSON.stringify(user));
     console.log('Handling auth...')
-    return new AuthActions.Login({
-        email: email,
-        userId: userId,
-        token: token,
-        expirationDate: expirationDate,
-        redirect: true
-    });
+    if (newUser) {
+        return new AuthActions.Signup({
+            email: email,
+            userId: userId,
+            token: token,
+            expirationDate: expirationDate,
+            redirect: true
+        })
+    } else {
+        return new AuthActions.Login({
+            email: email,
+            userId: userId,
+            token: token,
+            expirationDate: expirationDate,
+            redirect: true
+        });
+    }
 };
 
 const handleError = (errorResponse: any) => {
@@ -30,13 +40,13 @@ const handleError = (errorResponse: any) => {
     }
     switch (errorResponse.error.error.message) {
         case 'EMAIL_EXISTS':
-            errorMessage = 'This email exists already';
+            errorMessage = 'An account with this email exists already. Please sign-up with a unique email.';
             break;
         case 'EMAIL_NOT_FOUND':
-            errorMessage = 'An account for this email does not exist'
+            errorMessage = 'An account with this email does not exist.'
             break;
         case 'INVALID_PASSWORD':
-            errorMessage = 'Password incorrect'
+            errorMessage = 'Incorrect password.'
             break;
     }
     console.log(errorMessage);
@@ -60,16 +70,11 @@ export class AuthEffects {
             })
             .pipe(
                 tap(resData => {
-                    const setUpUserData = this.http.put(`https://tyager-angular-practice-app-default-rtdb.firebaseio.com/users/${resData.localId}.json`, 
-                      { 'watchlist': '' });
-                    setUpUserData.subscribe();
-                }),
-                tap(resData => {
                     this.authService.setLogoutTimer(+resData.expiresIn * 1000);
                 }),
                 map(resData => {
-                    return handleAuthentication(+resData.expiresIn, resData.email, resData.localId, resData.idToken);
-                }), 
+                    return handleAuthentication(+resData.expiresIn, resData.email, resData.localId, resData.idToken, true);
+                }),
                 catchError(errorResponse => {
                     return handleError(errorResponse);
                 })
@@ -101,11 +106,19 @@ export class AuthEffects {
 
     getWatchlist = createEffect(() => this.actions$.pipe(
         ofType(AuthActions.LOGIN),
-        map((loginInfo: AuthActions.Login) => {
+        map((loginInfo: AuthActions.Login) => {            
             console.log('Fetching user watchlist...');
             return new WatchlistActions.FetchUserWatchlist(loginInfo.payload.userId);
         })
     ));
+
+    initiatlizeUserData = createEffect(() => this.actions$.pipe(
+        ofType(AuthActions.SIGNUP),
+        map((loginInfo: AuthActions.Signup) => {
+            this.http.put(`https://tyager-angular-practice-app-default-rtdb.firebaseio.com/users/${loginInfo.payload.userId}.json`, 
+                { 'watchlist': '' }).pipe(take(1)).subscribe(() => console.log('Finished initializing watchlist!'));
+        })
+    ), {dispatch: false});
 
     clearWatchlistOnLogout = createEffect(() => this.actions$.pipe(
         ofType(AuthActions.LOGOUT),

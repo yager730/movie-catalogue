@@ -18,6 +18,7 @@ export class AuthComponent implements OnInit, OnDestroy {
 
   loggedIn = false;
   loginMode: "Sign Up" | "Login" | null = null;
+  error: string | null;
 
   userAuthForm: FormGroup;
 
@@ -32,6 +33,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     .subscribe(userAuthData => {
       this.userData = userAuthData.user;
       this.loggedIn = userAuthData.loggedIn;
+      this.error = userAuthData.authError;
     })
   }
 
@@ -60,6 +62,10 @@ export class AuthComponent implements OnInit, OnDestroy {
       this.store.dispatch(new AuthActions.InitiateLogin(this.userAuthForm.value)); 
     }
     this.userAuthForm.reset();
+  }
+
+  onAcknowledgeError(){
+    this.store.dispatch(new AuthActions.HandleError());
   }
 
   ngOnDestroy() {

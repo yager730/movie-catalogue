@@ -1,3 +1,5 @@
+<app-alert [message]="error" *ngIf="error" (close)="onAcknowledgeError()"></app-alert>
+
 <div *ngIf="loggedIn; else loginActions" style="display: flex; align-items: center;">
     <span style="font-size: .8em;">Logged in with Email: {{ userData.email }} &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; </span>
     <button mat-button class="top-menu-button" (click)="logout()" style="font-size: .9em;">
