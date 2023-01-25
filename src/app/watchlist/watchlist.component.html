@@ -1,69 +1,69 @@
 <div class="container">
-    <div class="row" *ngIf="watchlistDataSource.data.length > 0; else noFilms">
+    <app-loading-spinner *ngIf="userWatchlistLoading; else watchlistMovies" style="display: flex; margin: auto;"></app-loading-spinner>
+    
+    <ng-template #watchlistMovies>
+        <div class="row" *ngIf="watchlistDataSource.data.length > 0; else noFilms">
 
-        <div class="col-12" style="margin: 3% 0% 1% 0%;">
-            <h1 style="display: inline;">My Watchlist</h1>
-            <mat-slide-toggle class="example-margin" style="float: right;" labelPosition="before" color="primary" 
-                [checked]="tableView" (change)="switchView()"> View Watchlist in Table &nbsp;
-            </mat-slide-toggle>
-        </div>
+            <div class="col-12" style="margin: 3% 0% 1% 0%;">
+                <h1 style="display: inline;">My Watchlist</h1>
+                <mat-slide-toggle class="example-margin" style="float: right;" labelPosition="before" color="primary" 
+                    [checked]="tableView" (change)="switchView()"> View Watchlist in Table &nbsp;
+                </mat-slide-toggle>
+            </div>
 
-        <ng-container *ngIf="!tableView">
-            <div *ngFor="let film of watchlistDataSource.data" class="col-2">
-                <mat-card style="margin-top: 5%;" class="watchlist-movie-card">
-                    <img src="{{ film.movieDetails?.poster }}" alt="{{ film.movieDetails?.title }}" style="max-width: 100%;"/>
-                    <span class="action-options-overlay">
-                        <div class="action-options">
+            <ng-container *ngIf="!tableView">
+                <app-watchlist-card *ngFor="let film of watchlistDataSource.data.slice(firstDisplayedIndex, lastDisplayedIndex);"
+                [film]="film" class="col-2"></app-watchlist-card>
+                <mat-paginator #paginator *ngIf="numResults > 12"
+                    style="margin-top: 3%; border-radius: 5px;"
+                    [length]="numResults"
+                    [pageSize]="12"
+                    aria-label="Select page"
+                    (page)="handlePagination($event)">
+                </mat-paginator>
+            </ng-container>
+
+            <div *ngIf="tableView" class="col-12" style="margin-top: 1%;">
+                <table mat-table [dataSource]="sortedData" matSort (matSortChange)="sortData($event)"
+                    class="mat-elevation-z8" style="margin-bottom: 5%;">
+                    
+                    <ng-container matColumnDef="title">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef>Title</th>
+                        <td mat-cell *matCellDef="let film"> {{ film.movieDetails.title }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="director">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef> Director </th>
+                        <td mat-cell *matCellDef="let film"> {{ getDirector(film) }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef> Date </th>
+                        <td mat-cell *matCellDef="let film"> {{ getReleaseDate(film) }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="rating">
+                        <th mat-header-cell mat-sort-header *matHeaderCellDef> Rating </th>
+                        <td mat-cell *matCellDef="let film"> {{ getRating(film) }} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="options">
+                        <th mat-header-cell *matHeaderCellDef> Options </th>
+                        <td mat-cell *matCellDef="let film">
                             <button mat-icon-button title="Write a Review" (click)="removeWatchlistItem(film)">
                                 <mat-icon>create</mat-icon></button> 
                             <button mat-icon-button title="Remove from Watchlist" (click)="removeWatchlistItem(film)">
                                 <mat-icon>remove_circle</mat-icon></button>
-                        </div>
-                    </span> 
-                </mat-card>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="tableDisplayCols"></tr>
+                    <tr mat-row class="data-row" *matRowDef="let row; columns: tableDisplayCols;"></tr>
+                </table>
             </div>
-        </ng-container>
 
-        <div *ngIf="tableView" class="col-12" style="margin-top: 1%;">
-            <table mat-table [dataSource]="sortedData" matSort (matSortChange)="sortData($event)"
-                class="mat-elevation-z8" style="margin-bottom: 5%;">
-                
-                <ng-container matColumnDef="title">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef>Title</th>
-                    <td mat-cell *matCellDef="let film"> {{ film.movieDetails.title }} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="director">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Director </th>
-                    <td mat-cell *matCellDef="let film"> {{ getDirector(film) }} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="date">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Date </th>
-                    <td mat-cell *matCellDef="let film"> {{ getReleaseDate(film) }} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="rating">
-                    <th mat-header-cell mat-sort-header *matHeaderCellDef> Rating </th>
-                    <td mat-cell *matCellDef="let film"> {{ getRating(film) }} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="options">
-                    <th mat-header-cell *matHeaderCellDef> Options </th>
-                    <td mat-cell *matCellDef="let film">
-                        <button mat-icon-button title="Write a Review" (click)="removeWatchlistItem(film)">
-                            <mat-icon>create</mat-icon></button> 
-                        <button mat-icon-button title="Remove from Watchlist" (click)="removeWatchlistItem(film)">
-                            <mat-icon>remove_circle</mat-icon></button>
-                    </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="tableDisplayCols"></tr>
-                <tr mat-row class="data-row" *matRowDef="let row; columns: tableDisplayCols;"></tr>
-            </table>
         </div>
-
-    </div>
+    </ng-template>
 
     <ng-template #noFilms>
         <div class="col-12" style="padding-top: 10%; margin: auto; text-align: center;">

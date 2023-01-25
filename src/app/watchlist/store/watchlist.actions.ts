@@ -8,6 +8,7 @@ export const CLEAR_WATCHLIST = '[Watchlist] Clear Watchlist';
 export const FETCH_USER_WATCHLIST = '[Watchlist] Fetch User Watchlist';
 export const LOAD_USER_WATCHLIST = '[Watchlist] Load User Watchlist';
 export const SET_USER_WATCHLIST = '[Watchlist] Set User Watchlist';
+export const GET_WATCHLIST_SLICE = '[Watchlist] Get Watchlist Slice';
 
 export class GetUpdatedWatchlist implements Action {
     readonly type = GET_WATCHLIST;
@@ -44,6 +45,11 @@ export class SetUserWatchlist implements Action {
     constructor (public payload: string) {}
 }
 
+export class GetWatchlistSlice implements Action {
+    readonly type = GET_WATCHLIST_SLICE;
+    constructor (public payload: { fromIndex: number, untilIndex: number }) {}
+}
+
 export type WatchlistActions = 
 GetUpdatedWatchlist | AddToWatchlist | RemoveFromWatchlist | ClearWatchlist |
-FetchUserWatchlist | LoadUserWatchlist | SetUserWatchlist
+FetchUserWatchlist | LoadUserWatchlist | SetUserWatchlist | GetWatchlistSlice

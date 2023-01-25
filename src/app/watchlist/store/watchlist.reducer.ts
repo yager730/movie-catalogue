@@ -3,12 +3,18 @@ import * as WatchlistActions from "./watchlist.actions";
 
 export interface State {
     films: movieInfo[];
-    userWatchlistEmpty: boolean
+    loadingFilmsFromFirebase: boolean;
+    loadingPage: boolean,
+    firstDisplayedFilmIndex: number;
+    lastDisplayedFilmIndex: number;
 }
 
 const initState: State = {
     films: [],
-    userWatchlistEmpty: null
+    loadingFilmsFromFirebase: false,
+    loadingPage: false,
+    firstDisplayedFilmIndex: 0,
+    lastDisplayedFilmIndex: 12
 };
 
 export function watchlistReducer(state: State = initState, action: WatchlistActions.WatchlistActions) {
@@ -17,15 +23,30 @@ export function watchlistReducer(state: State = initState, action: WatchlistActi
             return {
                 ...state
             };
+        case WatchlistActions.FETCH_USER_WATCHLIST:
+            return {
+                ...state,
+                loadingFilmsFromFirebase: true
+            }
         case WatchlistActions.LOAD_USER_WATCHLIST:
             return {
                 ...state,
-                films: action.payload
+                films: action.payload,
+                loadingFilmsFromFirebase: false
+            }
+        case WatchlistActions.GET_WATCHLIST_SLICE:
+            return {
+                ...state,
+                firstDisplayedFilmIndex: action.payload.fromIndex,
+                lastDisplayedFilmIndex: action.payload.untilIndex,
+                loadingPage: true
             }
         case WatchlistActions.CLEAR_WATCHLIST:
             return {
                 ...state,
-                films: []
+                films: [],
+                firstDisplayedFilmIndex: 0,
+                lastDisplayedFilmIndex: 12
             }
         case WatchlistActions.ADD_FILM:
             return {
