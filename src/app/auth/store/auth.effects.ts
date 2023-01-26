@@ -156,6 +156,8 @@ export class AuthEffects {
         ofType(AuthActions.LOGOUT),
         map(() => {
             console.log('User logging out. Clearing user watchlist data');
+            this.authService.clearLogoutTimer();
+            localStorage.removeItem('userData');
             return new WatchlistActions.ClearWatchlist();
         })
     ));

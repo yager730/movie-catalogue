@@ -23,10 +23,9 @@ export class WatchlistEffects {
         switchMap((userId: WatchlistActions.FetchUserWatchlist) => {
             return this.http.get<string>(`${firebaseURL}/users/${userId.payload}/watchlist.json`)
             .pipe(map((resData) => {
-                let userWatchlistMovies: movieInfo[] = [];
                 if (resData !== "") {
-                    resData.split(',').forEach(id => {
-                        console.log(`Fetching data for movieId: ${id}`);
+                    let userWatchlistMovies: movieInfo[] = new Array(resData.split(',').length).fill({movieDetails: null, movieCrew: null, movieImagesPaths: null});
+                    resData.split(',').forEach((id, index) => {
                         return forkJoin({
                             details: this.http.get<MovieDetailsResponseData>(tmdbURL + '/movie/' + id + 
                                 '?api_key=' + environment.TMDB_API_key + '&language=en-US'),
@@ -34,7 +33,7 @@ export class WatchlistEffects {
                                 '/credits?api_key=' + environment.TMDB_API_key + '&language=en-US'),
                             images: this.http.get<MovieImagesResponseData>(tmdbURL + '/movie/' + id + 
                                 '/images?api_key=' + environment.TMDB_API_key + '&language=en-US&include_image_language=en%2Cnull') })
-                        .subscribe((data) => {
+                        .pipe(take(1)).subscribe((data) => {
                             const movieInfo = {
                                 movieDetails: {
                                     id: data.details.id,
@@ -49,11 +48,12 @@ export class WatchlistEffects {
                                 movieCrew: { cast: data.crew.cast, crew: data.crew.crew },
                                 movieImagePaths: data.images.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
                             };
-                            console.log(`movieId = ${movieInfo.movieDetails.id}, ${movieInfo.movieDetails.title}`)
-                            userWatchlistMovies = [...userWatchlistMovies, movieInfo];
-                            // Maybe track data of when the movies were originally added to the watchlist and sort that way?
-                            if (userWatchlistMovies.length === resData.split(',').length) { this.store.dispatch(new WatchlistActions.LoadUserWatchlist(userWatchlistMovies)) } 
-                            //.sort((a, b) => { return a.movieDetails.title < b.movieDetails.title ? -1 : 1 })
+                            console.log(`movieInfo loaded for ${movieInfo.movieDetails.id}: ${movieInfo.movieDetails.title}`)
+                            userWatchlistMovies = [...userWatchlistMovies];
+                            userWatchlistMovies[index] = movieInfo;
+
+                            if (userWatchlistMovies.filter(obj => obj.movieDetails !== null ).length > 0) 
+                                { this.store.dispatch(new WatchlistActions.LoadUserWatchlist(userWatchlistMovies)) } 
                         })
                     });
                 }
