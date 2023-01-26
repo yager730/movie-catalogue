@@ -2,9 +2,9 @@
     <app-loading-spinner *ngIf="userWatchlistLoading; else watchlistMovies" style="display: flex; margin: auto;"></app-loading-spinner>
     
     <ng-template #watchlistMovies>
-        <div class="row" *ngIf="watchlistDataSource.data.length > 0; else noFilms">
+        <div class="row" *ngIf="watchlistDataSource.data.length > 0; else noFilms" style="margin-bottom: 3%;">
 
-            <div class="col-12" style="margin: 3% 0% 1% 0%;">
+            <div class="col-12" style="margin: 2% 0% 1% 0%;">
                 <h1 style="display: inline;">My Watchlist</h1>
                 <mat-slide-toggle class="example-margin" style="float: right;" labelPosition="before" color="primary" 
                     [checked]="tableView" (change)="switchView()"> View Watchlist in Table &nbsp;
@@ -12,20 +12,15 @@
             </div>
 
             <ng-container *ngIf="!tableView">
-                <app-watchlist-card *ngFor="let film of watchlistDataSource.data.slice(firstDisplayedIndex, lastDisplayedIndex);"
-                [film]="film" class="col-2"></app-watchlist-card>
-                <mat-paginator #paginator *ngIf="numResults > 12"
-                    style="margin-top: 3%; border-radius: 5px;"
-                    [length]="numResults"
-                    [pageSize]="12"
-                    aria-label="Select page"
-                    (page)="handlePagination($event)">
-                </mat-paginator>
+                <!-- <div class="row" style="height: 68vh;"> -->
+                    <app-watchlist-card *ngFor="let film of watchlistDataSource.data.slice(firstDisplayedIndex, lastDisplayedIndex);"
+                    [film]="film" class="col-2"></app-watchlist-card>
+                <!-- </div> -->
             </ng-container>
 
             <div *ngIf="tableView" class="col-12" style="margin-top: 1%;">
-                <table mat-table [dataSource]="sortedData" matSort (matSortChange)="sortData($event)"
-                    class="mat-elevation-z8" style="margin-bottom: 5%;">
+                <table mat-table [dataSource]="sortedData.slice(firstDisplayedIndex, lastDisplayedIndex)" matSort (matSortChange)="sortData($event)"
+                    class="mat-elevation-z8">
                     
                     <ng-container matColumnDef="title">
                         <th mat-header-cell mat-sort-header *matHeaderCellDef>Title</th>
@@ -61,6 +56,15 @@
                     <tr mat-row class="data-row" *matRowDef="let row; columns: tableDisplayCols;"></tr>
                 </table>
             </div>
+
+            <mat-paginator #paginator *ngIf="numResults > 12"
+                style="margin-top: 2%; border-radius: 5px;"
+                [length]="numResults"
+                [pageSize]="12"
+                [pageSizeOptions]="[12, 30, 60]"
+                aria-label="Select page"
+                (page)="handlePagination($event)">
+            </mat-paginator>
 
         </div>
     </ng-template>

@@ -44,7 +44,7 @@ export class WatchlistComponent implements OnInit, OnDestroy {
     .subscribe(state => {
       this.userWatchlistLoading = state.loadingFilmsFromFirebase;
       this.watchlistDataSource.data = state.films;
-      this.sortedData = this.watchlistDataSource.data.slice();
+      this.watchlistDataSource.paginator = this.paginator;
       this.numResults = state.films.length;
       this.firstDisplayedIndex = state.firstDisplayedFilmIndex;
       this.lastDisplayedIndex = state.lastDisplayedFilmIndex;
@@ -63,10 +63,12 @@ export class WatchlistComponent implements OnInit, OnDestroy {
 
   switchView() {
     this.tableView = !this.tableView;
+    this.sortedData = this.watchlistDataSource.data.slice();
     console.log(this.tableView ? 'switched to table view' : 'switched to watchlist view');
   }
 
   sortData(sort: Sort) {
+    this.watchlistDataSource.paginator.firstPage();
     const data = this.watchlistDataSource.data.slice();
     if (!sort.active || sort.direction === '') {
       this.sortedData = data;
