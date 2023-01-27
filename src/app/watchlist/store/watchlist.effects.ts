@@ -52,7 +52,7 @@ export class WatchlistEffects {
                             userWatchlistMovies = [...userWatchlistMovies];
                             userWatchlistMovies[index] = movieInfo;
 
-                            if (userWatchlistMovies.filter(obj => obj.movieDetails !== null ).length > 0) 
+                            if (userWatchlistMovies.filter(obj => obj.movieDetails === null ).length === 0) 
                                 { this.store.dispatch(new WatchlistActions.LoadUserWatchlist(userWatchlistMovies)) } 
                         })
                     });
