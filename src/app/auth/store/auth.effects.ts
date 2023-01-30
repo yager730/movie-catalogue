@@ -155,6 +155,7 @@ export class AuthEffects {
     clearWatchlistOnLogout = createEffect(() => this.actions$.pipe(
         ofType(AuthActions.LOGOUT),
         map(() => {
+            location.reload();
             console.log('User logging out. Clearing user watchlist data');
             this.authService.clearLogoutTimer();
             localStorage.removeItem('userData');

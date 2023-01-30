@@ -17,11 +17,13 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   @Input() movie: number;
   movieInfoSubscription: Subscription;
   watchlistSubscription: Subscription;
+  authSubscription: Subscription;
 
   movieDetails: MovieDetails;
   movieCrew: MovieCrew;
   movieImages: string [];
 
+  userLoggedIn: boolean;
   onWatchlist: boolean;
   director: string;
   rating: number;
@@ -45,6 +47,11 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     .subscribe((results) => {
       this.onWatchlist = results.films.map(el => el.movieDetails.id).includes(this.movie);
     });
+    this.authSubscription = this.store.select('auth')
+    .pipe(map(authState => authState))
+    .subscribe((results) => {
+      this.userLoggedIn = !!results.user
+    })
   }
 
   addToWatchlist() {
@@ -60,5 +67,6 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.movieInfoSubscription.unsubscribe();
     this.watchlistSubscription.unsubscribe();
+    this.authSubscription.unsubscribe();
   }
 }

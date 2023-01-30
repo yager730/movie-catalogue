@@ -4,9 +4,10 @@ import { WatchlistComponent } from "./watchlist.component";
 import { WatchlistCardComponent } from "./watchlist-card/watchlist-card.component";
 import { SharedModule } from '../shared/shared.module';
 import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
+import { AuthGuard } from "../auth/auth.guard";
 
 const routes: Routes =[
-    { path: '', component: WatchlistComponent }
+    { path: '', component: WatchlistComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

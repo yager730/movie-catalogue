@@ -47,3 +47,7 @@
     font-style: italic;
     color: #707070;
 }
+
+.movie-actions:not([disabled]) {
+    background-color: #c2185ca4;
+}
