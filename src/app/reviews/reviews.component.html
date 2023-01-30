@@ -1,1 +1,13 @@
-<h2>reviews works!</h2>
+<div class="container" style="margin-top: 3%;">
+    <h2>My Reviews</h2>
+    <div class="row">
+        <div class="col-12" style="outline: 1px solid limegreen;">
+            <p>Some placeholder garbage for now...</p>
+            <ul>
+                <ng-container *ngFor="let review of reviews">
+                    <li>{{ review.movie_details.title }}</li>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+</div>

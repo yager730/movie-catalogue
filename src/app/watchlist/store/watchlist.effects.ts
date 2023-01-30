@@ -48,7 +48,7 @@ export class WatchlistEffects {
                                 movieCrew: { cast: data.crew.cast, crew: data.crew.crew },
                                 movieImagePaths: data.images.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
                             };
-                            console.log(`movieInfo loaded for ${movieInfo.movieDetails.id}: ${movieInfo.movieDetails.title}`)
+                            //console.log(`movieInfo loaded for ${movieInfo.movieDetails.id}: ${movieInfo.movieDetails.title}`)
                             userWatchlistMovies = [...userWatchlistMovies];
                             userWatchlistMovies[index] = movieInfo;
 
