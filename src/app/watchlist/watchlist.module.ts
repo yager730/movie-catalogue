@@ -7,7 +7,8 @@ import { NgxSkeletonLoaderModule } from "ngx-skeleton-loader";
 import { AuthGuard } from "../auth/auth.guard";
 
 const routes: Routes =[
-    { path: '', component: WatchlistComponent, canActivate: [AuthGuard] }
+    { path: '', component: WatchlistComponent, canActivate: [AuthGuard] },
+    { path: '**', canActivate: [AuthGuard], redirectTo: '' }
 ];
 
 @NgModule({

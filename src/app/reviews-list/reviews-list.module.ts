@@ -7,7 +7,8 @@ import { ReviewComponent } from "./review/review.component";
 
 const routes: Routes = [
     { path: '', component: ReviewsListComponent, canActivate: [AuthGuard] },
-    { path: "id/:id", component: ReviewComponent, canActivate: [AuthGuard] }
+    { path: "id/:id", component: ReviewComponent, canActivate: [AuthGuard] },
+    { path: '**', canActivate: [AuthGuard], redirectTo: '' }
 ];
 
 @NgModule({
