@@ -5,11 +5,11 @@ import { movieReview } from './review.model';
 import * as fromApp from '../store/app.reducer';
 
 @Component({
-  selector: 'app-reviews',
-  templateUrl: './reviews.component.html',
-  styleUrls: ['./reviews.component.css']
+  selector: 'app-reviews-list',
+  templateUrl: './reviews-list.component.html',
+  styleUrls: ['./reviews-list.component.css']
 })
-export class ReviewsComponent implements OnInit, OnDestroy {
+export class ReviewsListComponent implements OnInit, OnDestroy {
   reviewsSubscription: Subscription;  
   reviews: movieReview [];
 

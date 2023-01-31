@@ -1,0 +1,16 @@
+<div class="container">
+    <app-loading-spinner *ngIf="loadingPage; else reviewInfo" style="display: flex; margin: auto;"></app-loading-spinner>
+
+    <ng-template #reviewInfo>
+        <div class="row">
+            <div *ngIf="apiError; else navigatedViaButton">
+                <app-alert message="Invalid url. Close to return to the main reviews page." (close)="onAcknowledgeError()"></app-alert>
+            </div>
+            
+            <ng-template #navigatedViaButton>
+                <h1>{{ movie.movieDetails?.title }}</h1>
+            </ng-template>
+        </div>
+    </ng-template>
+</div>
+

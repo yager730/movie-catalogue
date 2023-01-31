@@ -5,6 +5,7 @@ import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
 
 import * as fromApp from '../../store/app.reducer';
 import { MovieCrew, MovieDetails } from '../../shared/movie-info.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-movie-details',
@@ -28,7 +29,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   director: string;
   rating: number;
   
-  constructor(private store: Store<fromApp.AppState>) {}
+  constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
   ngOnInit() {
     this.movieInfoSubscription = this.store.select('search')
@@ -54,6 +55,15 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     })
   }
 
+  goToReviews() {
+    this.router.navigate([`reviews/id/${this.movieDetails.id}`], {state: {
+      movieInfo: {
+        movieDetails: this.movieDetails,
+        movieCrew: this.movieCrew,
+        movieImages: this.movieImages }
+    }});
+  }
+
   addToWatchlist() {
     this.store.dispatch(new WatchlistActions.AddToWatchlist({
       movieDetails: this.movieDetails,
@@ -61,8 +71,6 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       movieImagePaths: this.movieImages
     }));
   }
-
-  doesNothing() { }
 
   ngOnDestroy(): void {
     this.movieInfoSubscription.unsubscribe();

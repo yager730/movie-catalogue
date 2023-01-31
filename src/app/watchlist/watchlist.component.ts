@@ -8,6 +8,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import * as WatchlistActions from './store/watchlist.actions';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
 
 function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
@@ -37,14 +38,13 @@ export class WatchlistComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   sortedData: movieInfo[];
 
-  constructor ( private store: Store<fromApp.AppState> ) {}
+  constructor ( private store: Store<fromApp.AppState>, private router: Router ) {}
 
   ngOnInit(): void {
     this.watchlistSubscription = this.store.select('watchlist')
     .subscribe(state => {
       this.userWatchlistLoading = state.loadingFilmsFromFirebase;
       this.watchlistDataSource.data = state.films;
-      this.watchlistDataSource.paginator = this.paginator;
       this.numResults = state.films.length;
       this.firstDisplayedIndex = state.firstDisplayedFilmIndex;
       this.lastDisplayedIndex = state.lastDisplayedFilmIndex;
@@ -62,6 +62,8 @@ export class WatchlistComponent implements OnInit, OnDestroy {
   }
 
   switchView() {
+    this.watchlistDataSource.paginator = this.paginator;
+    console.log(this.watchlistDataSource.paginator)
     this.tableView = !this.tableView;
     this.sortedData = this.watchlistDataSource.data.slice();
     console.log(this.tableView ? 'switched to table view' : 'switched to watchlist view');
@@ -109,6 +111,15 @@ export class WatchlistComponent implements OnInit, OnDestroy {
 
   getRating(film: movieInfo) {
     return Math.round(film.movieDetails?.score * 100) / 100; 
+  }
+
+  goToReviews(film: movieInfo) {
+    this.router.navigate([`reviews/id/${film.movieDetails.id}`], {state: {
+      movieInfo: {
+        movieDetails: film.movieDetails,
+        movieCrew:film.movieCrew,
+        movieImages: film.movieImagePaths }
+    }});
   }
 
   removeWatchlistItem(film: movieInfo) {

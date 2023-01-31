@@ -1,7 +1,7 @@
 import * as fromAuth from '../auth/store/auth.reducer';
 import * as fromSearch from '../search/store/search.reducer';
 import * as fromWatchlist from '../watchlist/store/watchlist.reducer';
-import * as fromReviews from '../reviews/store/reviews.reducer';
+import * as fromReviews from '../reviews-list/store/reviews.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
