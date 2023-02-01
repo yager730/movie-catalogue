@@ -4,6 +4,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { SharedModule } from "../shared/shared.module";
 import { ReviewsListComponent } from "./reviews-list.component";
 import { ReviewComponent } from "./review/review.component";
+import { ReactiveFormsModule } from "@angular/forms";
 
 const routes: Routes = [
     { path: '', component: ReviewsListComponent, canActivate: [AuthGuard] },
@@ -18,6 +19,7 @@ const routes: Routes = [
     ],
     imports: [
         SharedModule,
+        ReactiveFormsModule,
         RouterModule.forChild(routes)
     ]
 })

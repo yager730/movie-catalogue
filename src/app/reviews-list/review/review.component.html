@@ -3,14 +3,104 @@
 
     <ng-template #reviewInfo>
         <div class="row">
-            <div *ngIf="apiError; else navigatedViaButton">
-                <app-alert message="Invalid url. Close to return to the main reviews page." (close)="onAcknowledgeError()"></app-alert>
+            <div *ngIf="apiError; else review">
+                <app-alert message="Invalid url. Close to return to the main reviews page." (close)="goBackToReviews()"></app-alert>
             </div>
             
-            <ng-template #navigatedViaButton>
-                <h1>{{ movie.movieDetails?.title }}</h1>
+            <ng-template #review>
+                <h2 style="margin-top: 3%; display: flex; align-items: center;">
+                    <span style="color: #707070;">Review for&nbsp;&nbsp;</span> 
+                    <span style="font-size: 1.6em;">{{ movie.movieDetails?.title }}</span>
+                    <span style="flex: 1 1 auto;"></span>
+                    <button mat-raised-button (click)="goBackToReviews()"><mat-icon>remove_red_eye</mat-icon>See All Reviews</button>
+                </h2>
+
+                <div class="col-12">
+                    <mat-card><mat-card-content>
+                        <div class="row">
+
+                            <!-- Movie Info -->
+                            <div class="col-4">
+                                <img src="{{ movie.movieDetails?.poster }}" alt="Poster for {{ movie.movieDetails?.title }}" style="max-width: 100%;"/>
+                                <!-- <p>Release Date: {{ movie.movieDetails?.release_date }}</p>
+                                <p style="text-align: center;">{{ movie.movieDetails?.overview }}</p> -->
+                            </div>
+
+                            <div class="col-8">
+                                <p style="color: #707070; font-style: italic;">{{ movie.movieDetails?.overview }}</p>
+                                <p>Directed By: {{ getDirector(movie) }} &nbsp;&nbsp; | &nbsp;&nbsp; 
+                                   Release Date: {{ getReleaseDate(movie) }} &nbsp;&nbsp; | &nbsp;&nbsp;
+                                   Audience Score: {{ getRating(movie) }} / 10
+                                </p>
+                                
+                                <hr />
+                                <div *ngIf="reviewDataForUser; else editMode ? reviewFormTemplate : noReviewFound">
+                                    <p>Movie Info</p>
+                                </div>
+                            </div>
+
+                            <!-- Movie Review -->
+                            <!-- <div class="col-6">
+                                <div *ngIf="reviewDataForUser; else editMode ? reviewFormTemplate : noReviewFound">
+                                    <p>Movie Info</p>
+                                </div>
+                            </div> -->
+
+                        </div>
+                    </mat-card-content></mat-card>
+                </div>
+
             </ng-template>
+
         </div>
     </ng-template>
 </div>
 
+<ng-template #reviewFormTemplate>
+    <!-- <div style="padding-top: 10%; margin: auto; text-align: center;"> -->
+    <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" style="display: block">
+            <mat-label for="reviewText">My Review</mat-label>
+            <textarea matInput class="form-control" formControlName="reviewText" 
+                id="reviewText" class="review-text-area" rows="14" 
+                placeholder="Write your review here..."></textarea>
+        </mat-form-field>
+
+        <div style="margin-bottom: 2%; display: flex; align-items: baseline;">
+            <mat-form-field appearance="outline" style="margin-right: 3%;">
+                <mat-label for="dateWatched">Date Watched</mat-label>
+                <input matInput class="form-control" formControlName="dateWatched" 
+                    id="dateWatched" [matDatepicker]="picker">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label for="rating">Rating</mat-label>
+                <input matInput
+                    class="form-control"
+                    formControlName="rating" 
+                    id="rating"
+                    min="1"
+                    max="10"
+                    type="number">
+                <mat-hint>1-10</mat-hint>
+            </mat-form-field>
+            <span style="flex: 1 1 auto;"></span>
+            <button mat-raised-button type="submit" style="margin-right: 1%; background-color: #c2185ca4;"><mat-icon>save_alt</mat-icon>Save Review</button>
+            <button mat-raised-button style="background-color: #c2185ca4;" (click)="handleCancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+        </div>
+        
+    </form>
+    <!-- </div> -->
+</ng-template>
+
+<!-- If user navigates to a review page manually for a film w/o a review -->
+<ng-template #noReviewFound>
+    <div style="padding-top: 10%; margin: auto; text-align: center;">
+        <img src="../../assets/images/no-items-found.png" alt="No Items Found" style="opacity: 40%; height: 250px;"/>
+        <h1 style="color: #a1a1a1;">No Review Has Been Found For This Film</h1>
+        <!-- <button mat-raised-button></button> -->
+        <button mat-raised-button style="background-color: #c2185ca4;" (click)="addReview()">Add A Review</button>
+    </div>
+</ng-template>

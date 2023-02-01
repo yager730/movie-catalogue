@@ -13,6 +13,8 @@ import { MatListModule } from "@angular/material/list"
 import { MatTableModule } from "@angular/material/table";
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from "@angular/material/core";
 import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
@@ -39,10 +41,13 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
         MatTableModule,
         MatInputModule,
         MatFormFieldModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
         MatSortModule,
         MatPaginatorModule,
         MatSlideToggleModule,
         NgbCarouselModule
-    ]
+    ],
+    providers: [ MatDatepickerModule ]
 })
 export class SharedModule {}

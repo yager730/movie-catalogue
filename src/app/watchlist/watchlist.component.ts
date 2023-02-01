@@ -10,6 +10,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 
+import * as HelperFunctions from '../shared/utils';
+
 function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
@@ -96,25 +98,12 @@ export class WatchlistComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDirector(film: movieInfo) {
-    if (film.movieCrew.crew.map(el => el.job).includes('Director')) {
-      return film.movieCrew.crew.filter(person =>  person.job === 'Director')[0].name;
-    } else { return 'n/a' }
-  }
-
-  getReleaseDate(film: movieInfo) {
-    if (film.movieDetails.release_date) {
-      const date = new Date(film.movieDetails.release_date);
-      return date.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric" })
-    } else { return 'n/a' }
-  }
-
-  getRating(film: movieInfo) {
-    return Math.round(film.movieDetails?.score * 100) / 100; 
-  }
+  getDirector(film: movieInfo) { return HelperFunctions.getDirector(film) };
+  getReleaseDate(film: movieInfo) { return HelperFunctions.getReleaseDate(film) };
+  getRating(film: movieInfo) { return HelperFunctions.getRating(film) };
 
   goToReviews(film: movieInfo) {
-    this.router.navigate([`reviews/id/${film.movieDetails.id}`], {state: {
+    this.router.navigate([`reviews/id/${film.movieDetails.id}`], { state: {
       movieInfo: {
         movieDetails: film.movieDetails,
         movieCrew:film.movieCrew,
