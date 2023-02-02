@@ -4,8 +4,9 @@
         <div class="col-12" style="outline: 1px solid limegreen;">
             <p>Some placeholder garbage for now...</p>
             <ul>
-                <ng-container *ngFor="let review of reviews">
-                    <li>{{ review.movie_details.title }}</li>
+                <ng-container *ngFor="let filmEntry of reviewsList">
+                    <li>{{ filmEntry.movieTitle }}</li>
+                    <button (click)="ishClicked(filmEntry)">CLICK THIS ISH</button>
                 </ng-container>
             </ul>
         </div>

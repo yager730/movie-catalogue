@@ -8,15 +8,17 @@ export const REMOVE_REVIEW = '[Review] Remove Review';
 
 export class AddReview implements Action {
     readonly type = ADD_REVIEW;
-    constructor (public payload: movieReview) {}
+    constructor (public payload: { movieInfo: movieInfo, review: movieReview }) {}
 }
 
 export class EditReview implements Action {
     readonly type = EDIT_REVIEW;
+    constructor (public payload: { movieInfo: movieInfo, index: number, review: movieReview }) {}
 }
 
 export class RemoveReview implements Action {
     readonly type = REMOVE_REVIEW;
+    constructor (public payload: { movieInfo: movieInfo, index: number }) {}
 }
 
 export type ReviewActions = 

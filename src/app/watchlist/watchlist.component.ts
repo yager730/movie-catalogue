@@ -103,6 +103,9 @@ export class WatchlistComponent implements OnInit, OnDestroy {
   getRating(film: movieInfo) { return HelperFunctions.getRating(film) };
 
   goToReviews(film: movieInfo) {
+    // Reset watchlist pagination for when user goes back
+    if (this.watchlistDataSource) { this.watchlistDataSource.paginator.firstPage(); }
+
     this.router.navigate([`reviews/id/${film.movieDetails.id}`], { state: {
       movieInfo: {
         movieDetails: film.movieDetails,

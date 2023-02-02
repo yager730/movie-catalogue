@@ -1,0 +1,49 @@
+<div style="display: flex; align-items: center; margin-bottom: 10px;">
+
+    <p *ngIf="newEntry" style="font-weight: bold; color:#707070; margin: 0%;">
+        New Review for {{ this.movie.movieDetails.title }}</p>
+    <div *ngIf="!newEntry" style="display: flex; align-items: center;">
+        <!-- <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button> -->
+        <p style="font-weight: bold; color:#707070; margin: 0%;">
+            &nbsp;Editing Review for {{ this.movie.movieDetails.title }}</p>
+    </div>    
+    <span style="flex: 1 1 auto;"></span>
+    <button mat-stroked-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon>See All My Reviews</button>
+</div>
+
+<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" style="display: block">
+        <mat-label for="reviewText">My Review</mat-label>
+        <textarea matInput class="form-control" formControlName="reviewText" 
+            id="reviewText" class="review-text-area" rows="13" 
+            value="{{ formData?.review.reviewText }}" placeholder="Write your review here..."></textarea>
+    </mat-form-field>
+
+    <div style="margin-bottom: 2%; display: flex; align-items: baseline;">
+        <mat-form-field appearance="outline" style="margin-right: 3%;">
+            <mat-label for="watchDate">Date Watched</mat-label>
+            <input matInput class="form-control" formControlName="watchDate" 
+                id="watchDate" value="{{ formData?.review.watchDate }}" [matDatepicker]="picker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label for="rating">Rating</mat-label>
+            <input matInput
+                value="{{ formData?.review.rating }}"
+                class="form-control"
+                formControlName="rating" 
+                id="rating"
+                min="1"
+                max="10"
+                type="number">
+            <mat-hint>1-10</mat-hint>
+        </mat-form-field>
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-raised-button type="submit" style="margin-right: 1%; background-color: #c2185ca4;">
+            <mat-icon>save_alt</mat-icon>Save Review</button>
+        <button mat-raised-button *ngIf="!newEntry" style="margin-right: 1%; background-color: #c2185ca4;" (click)="deleteReview()">
+            <mat-icon>delete</mat-icon>Delete Review</button>
+    </div>  
+</form>

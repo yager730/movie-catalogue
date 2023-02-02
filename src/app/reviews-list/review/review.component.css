@@ -1,3 +1,8 @@
-.review-text-area {
-    resize: none;
+hr.divider {
+    margin-bottom: 10px;
+ }
+
+.review-action-button {
+    margin-right: 5px;
+    /* background-color: #c2185ca4; */
 }

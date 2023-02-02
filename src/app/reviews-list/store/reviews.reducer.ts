@@ -1,55 +1,70 @@
-import { movieReview } from "../review.model";
+import { movieReview, movieReviews } from "../review.model";
 import * as ReviewActions from "./reviews.actions";
 
 export interface State {
-    reviews: movieReview[];
+    reviewsList: movieReviews[];
 }
 
 const initState: State = {
-    reviews: [
-        {
-            reviewId: '1',
-            movie_details: {
-                id: 290250,
-                title: 'The Nice Guys',
-                tagline: 'Private dicks.',
-                runtime: 120,
-                release_date: '06-05-1984',
-                poster: '/img-not-found',
-                score: 10,
-                overview: 'Filler text'
-            },
-            user_review_text: 'It was good',
-            user_last_edited_date: new Date('06-29-2002'),
-            user_last_watched_date: new Date('06-25-2002'),
-            user_rating: 7
-        },
-        {
-            reviewId: '2',
-            movie_details: {
-                id: 279,
-                title: 'Amadeus',
-                tagline: 'Music music music',
-                runtime: 125,
-                release_date: '03-24-1990',
-                poster: '/img-not-found',
-                score: 8.7,
-                overview: 'Filler-er text'
-            },
-            user_review_text: 'It was bad',
-            user_last_edited_date: new Date('07-30-2009'),
-            user_last_watched_date: new Date('07-30-2000'),
-            user_rating: 3.5
-        }
-    ]
+    reviewsList: []
 };
 
 export function reviewsReducer(state: State = initState, action: ReviewActions.ReviewActions) {
+    let updatedReviewList: movieReviews[];
+    let updateIndex: number;
+    let updatedReviews: movieReview[];
+    let updatedMovieReviews: movieReviews;
+
     switch (action.type) {
         case ReviewActions.ADD_REVIEW:
+            if (state.reviewsList.map(review => review.movieId).includes(action.payload.movieInfo.movieDetails.id)) {
+                updatedReviewList = [...state.reviewsList];
+                updateIndex = state.reviewsList.findIndex((el) => el.movieId === action.payload.movieInfo.movieDetails.id);
+                updatedReviews = [...state.reviewsList[updateIndex].reviews, action.payload.review];
+                updatedMovieReviews = { 
+                    movieId: state.reviewsList[updateIndex].movieId,
+                    movieTitle: state.reviewsList[updateIndex].movieTitle,
+                    reviews: updatedReviews
+                }
+                updatedReviewList[updateIndex] = updatedMovieReviews;
+            } else {
+                updatedReviewList = [...state.reviewsList, {
+                    movieId: action.payload.movieInfo.movieDetails.id,
+                    movieTitle: action.payload.movieInfo.movieDetails.title, 
+                    reviews: [action.payload.review] }]
+            }
             return {
                 ...state,
-                reviews: [...state.reviews, action.payload]
+                reviewsList: updatedReviewList
+            };
+        case ReviewActions.EDIT_REVIEW:
+            updatedReviewList = [...state.reviewsList];
+            updateIndex = state.reviewsList.findIndex((el) => el.movieId === action.payload.movieInfo.movieDetails.id);
+            const updatedReview = action.payload.review;
+            updatedReviews = updatedReviewList[updateIndex].reviews.map((el, i) => i === action.payload.index ? updatedReview : el);
+            updatedMovieReviews = { 
+                movieId: state.reviewsList[updateIndex].movieId,
+                movieTitle: state.reviewsList[updateIndex].movieTitle,
+                reviews: updatedReviews
+            }
+            updatedReviewList[updateIndex] = updatedMovieReviews;
+            return {
+                ...state,
+                reviewsList: updatedReviewList
+            };
+        case ReviewActions.REMOVE_REVIEW:
+            updatedReviewList = [...state.reviewsList];
+            updateIndex = state.reviewsList.findIndex((el) => el.movieId === action.payload.movieInfo.movieDetails.id);
+            updatedReviews = updatedReviewList[updateIndex].reviews.filter((review, index) => index !== action.payload.index);
+            updatedMovieReviews = { 
+                movieId: state.reviewsList[updateIndex].movieId,
+                movieTitle: state.reviewsList[updateIndex].movieTitle,
+                reviews: updatedReviews
+            }
+            updatedReviewList[updateIndex] = updatedMovieReviews;
+            return {
+                ...state,
+                reviewsList: updatedReviewList
             };
         default:
             return state;

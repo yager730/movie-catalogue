@@ -5,6 +5,7 @@ import { SharedModule } from "../shared/shared.module";
 import { ReviewsListComponent } from "./reviews-list.component";
 import { ReviewComponent } from "./review/review.component";
 import { ReactiveFormsModule } from "@angular/forms";
+import { ReviewFormComponent } from "./review-form/review-form.component";
 
 const routes: Routes = [
     { path: '', component: ReviewsListComponent, canActivate: [AuthGuard] },
@@ -16,6 +17,7 @@ const routes: Routes = [
     declarations: [
         ReviewsListComponent,
         ReviewComponent,
+        ReviewFormComponent
     ],
     imports: [
         SharedModule,
