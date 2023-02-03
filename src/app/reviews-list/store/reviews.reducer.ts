@@ -2,10 +2,12 @@ import { movieReview, movieReviews } from "../review.model";
 import * as ReviewActions from "./reviews.actions";
 
 export interface State {
+    movieInfoLoaded: boolean;
     reviewsList: movieReviews[];
 }
 
 const initState: State = {
+    movieInfoLoaded: false,
     reviewsList: []
 };
 
@@ -62,6 +64,16 @@ export function reviewsReducer(state: State = initState, action: ReviewActions.R
                 ...state,
                 reviewsList: updatedReviewList
             };
+        case ReviewActions.LOAD_MOVIE:
+            return {
+                ...state,
+                movieInfoLoaded: false
+            }
+        case ReviewActions.MOVIE_LOADED:
+            return {
+                ...state,
+                movieInfoLoaded: true
+            }
         default:
             return state;
     }

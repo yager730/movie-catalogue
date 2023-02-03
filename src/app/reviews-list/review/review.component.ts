@@ -42,26 +42,31 @@ export class ReviewComponent implements OnInit {
 
     // 99% of time users will navigate to this page via button press, which pass along movieInfo
     if (history.state['movieInfo']) {
-      this.loadingPage = false;
+      this.store.dispatch(new ReviewsActions.MovieInfoLoaded());
       this.movie = history.state['movieInfo'];
       // Will need a more robust check here once I actually am able to save reviews
       this.editMode = true;
     } else {
       console.log('Navigated to page directly, fetching data...')
+      this.store.dispatch(new ReviewsActions.LoadMovieInfo());
       this.ReviewsService.fetchMovieData(location.href.split('/').pop())
       .pipe(take(1)).subscribe(results => {
         if (typeof(results) === 'string') {
           this.apiError = true
+          this.store.dispatch(new ReviewsActions.MovieInfoLoaded());
         } else { 
           this.movie = results; 
-          this.loadingPage = false;
+          this.store.dispatch(new ReviewsActions.MovieInfoLoaded());
         }
       });
     }
 
     this.reviewStoreSubscription = this.store.select('reviews')
     .subscribe(data => {
-      this.reviews = this.getReviews(this.movie?.movieDetails.id, data.reviewsList);
+      this.loadingPage = !data.movieInfoLoaded;
+      if (!this.loadingPage) {
+        this.reviews = this.getReviews(this.movie?.movieDetails.id, data.reviewsList);
+      }
     })
   }
 
