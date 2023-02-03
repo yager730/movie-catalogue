@@ -1,14 +1,17 @@
 <div style="display: flex; align-items: center; margin-bottom: 10px;">
 
-    <p *ngIf="newEntry" style="font-weight: bold; color:#707070; margin: 0%;">
-        New Review for {{ this.movie.movieDetails.title }}</p>
+    <div *ngIf="newEntry" style="display: flex; align-items: center;">
+        <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button>
+        <p style="font-weight: bold; color:#707070; margin: 0%;">
+            New Review for {{ this.movie.movieDetails.title }}</p>
+    </div> 
     <div *ngIf="!newEntry" style="display: flex; align-items: center;">
-        <!-- <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button> -->
+        <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button>
         <p style="font-weight: bold; color:#707070; margin: 0%;">
             &nbsp;Editing Review for {{ this.movie.movieDetails.title }}</p>
     </div>    
     <span style="flex: 1 1 auto;"></span>
-    <button mat-stroked-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon>See All My Reviews</button>
+    <button mat-stroked-button color="accent" (click)="handleCancel()"><mat-icon>remove_red_eye</mat-icon>See All My Reviews</button>
 </div>
 
 <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">

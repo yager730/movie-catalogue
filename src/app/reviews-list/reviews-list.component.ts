@@ -27,7 +27,7 @@ export class ReviewsListComponent implements OnInit, OnDestroy {
   }
 
   ishClicked(film: movieReviews) {
-    this.router.navigate([`./id/${film.movieId}`], { relativeTo: this.route });
+    this.router.navigate([`./id/${film.movieDetails.id}`], { relativeTo: this.route });
   }
 
   ngOnDestroy() {

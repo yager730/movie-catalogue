@@ -1,4 +1,4 @@
-import { movieInfo } from "../shared/movie-info.model"
+import { MovieDetails, movieInfo } from "../shared/movie-info.model"
 
 export interface movieReview {
     rating: number,
@@ -10,7 +10,6 @@ export interface movieReview {
 
 // Review List is an array of movieReviews
 export interface movieReviews {
-    movieId: number,
-    movieTitle: string,
+    movieDetails: MovieDetails,
     reviews: movieReview []
 }

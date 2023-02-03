@@ -50,22 +50,24 @@ export class ReviewComponent implements OnInit {
       console.log('Navigated to page directly, fetching data...')
       this.ReviewsService.fetchMovieData(location.href.split('/').pop())
       .pipe(take(1)).subscribe(results => {
-        this.loadingPage = false;
         if (typeof(results) === 'string') {
           this.apiError = true
-        } else { this.movie = results; }
+        } else { 
+          this.movie = results; 
+          this.loadingPage = false;
+        }
       });
     }
 
     this.reviewStoreSubscription = this.store.select('reviews')
     .subscribe(data => {
-      this.reviews = this.getReviews(this.movie.movieDetails.id, data.reviewsList);
+      this.reviews = this.getReviews(this.movie?.movieDetails.id, data.reviewsList);
     })
   }
 
   getReviews(id: number, reviewList: movieReviews[]): movieReview [] {
-    if (reviewList.map(el => el.movieId).includes(id)) {
-      return reviewList.filter(el => el.movieId === id)[0].reviews;
+    if (reviewList.map(el => el.movieDetails.id).includes(id)) {
+      return reviewList.filter(el => el.movieDetails.id === id)[0].reviews;
     } else { return [] }
   }
 

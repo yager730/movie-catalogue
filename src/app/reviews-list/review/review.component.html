@@ -8,8 +8,10 @@
             </div>
             
             <ng-template #review>
-                <h2 style="margin-top: 3%; display: flex; align-items: center;">
-                    <button mat-icon-button color="accent" (click)="goBackToLastPage()"><mat-icon>keyboard_backspace</mat-icon></button>
+                <div style="margin-top: 2%; display: flex;">
+                    <button mat-raised-button (click)="goBackToLastPage()"><mat-icon>keyboard_backspace</mat-icon>Back to Previous Page</button>
+                </div>
+                <h2 style="margin-top: 1.5%; display: flex; align-items: center;">
                     <span style="color: #707070;">Review for&nbsp;&nbsp;</span> 
                     <span style="font-size: 1.6em;">{{ movie.movieDetails?.title }}</span>
                     <span style="flex: 1 1 auto;"></span>
@@ -17,7 +19,7 @@
                 </h2>
 
                 <div class="col-12">
-                    <mat-card><mat-card-content>
+                    <mat-card style="margin-bottom: 2%;"><mat-card-content>
                         <div class="row">
 
                             <!-- Movie Info -->

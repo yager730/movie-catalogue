@@ -5,7 +5,7 @@
             <p>Some placeholder garbage for now...</p>
             <ul>
                 <ng-container *ngFor="let filmEntry of reviewsList">
-                    <li>{{ filmEntry.movieTitle }}</li>
+                    <li>{{ filmEntry.movieDetails.title }}</li>
                     <button (click)="ishClicked(filmEntry)">CLICK THIS ISH</button>
                 </ng-container>
             </ul>
