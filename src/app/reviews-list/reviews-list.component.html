@@ -1,7 +1,110 @@
-<div class="container" style="margin-top: 3%;">
-    <h2>My Reviews</h2>
-    <div class="row">
-        <div class="col-12" style="outline: 1px solid limegreen;">
+<div class="container">
+    <!-- <h2>My Reviews</h2> -->
+    <div class="row" *ngIf="reviewsList.length > 0; else noFilms" style="margin-bottom: 3%;">
+
+        <div class="col-12" style="margin: 2% 0% 1% 0%;">
+            <h1 style="display: inline;">My Reviews</h1>
+        </div>
+
+        <div class="col-12" style="margin-top: 1%;">
+            <table mat-table [dataSource]="reviewsList" multiTemplateDataRows
+                class="mat-elevation-z8">
+                
+                <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef>Title</th>
+                    <td mat-cell *matCellDef="let film"> {{ film.movieDetails.title }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="lastWatched">
+                    <th mat-header-cell *matHeaderCellDef>Last Watched</th>
+                    <td mat-cell *matCellDef="let film"> {{ film.reviews[0].watchDate.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric" }) }} </td>
+                </ng-container>
+                
+                <ng-container matColumnDef="timesLogged">
+                    <th mat-header-cell *matHeaderCellDef>Times Reviewed</th>
+                    <td mat-cell *matCellDef="let film"> {{ film.reviews.length }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="rating">
+                    <th mat-header-cell *matHeaderCellDef>My Rating</th>
+                    <td mat-cell *matCellDef="let film"> {{ film.reviews[0].rating }} </td>
+                </ng-container>
+                
+                <ng-container matColumnDef="options">
+                    <th mat-header-cell *matHeaderCellDef> Options </th>
+                    <td mat-cell *matCellDef="let film">
+                        <button mat-icon-button title="View Existing Reviews" (click)="goToReviews(film)">
+                            <mat-icon>remove_red_eye</mat-icon></button>
+                        <button mat-icon-button title="Add New Review">
+                            <mat-icon>library_add</mat-icon></button>  
+                        <!-- <button mat-icon-button title="Edit this Review">
+                            <mat-icon>create</mat-icon></button>  -->
+                        <!-- Should option for remove reviews exist? -->
+                        <!-- <button mat-icon-button title="Remove from Watchlist">
+                            <mat-icon>remove_circle</mat-icon></button> -->
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="expand">
+                    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button aria-label="expand row" (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+                        <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+                        <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+                      </button>
+                    </td>
+                </ng-container>
+                                
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+                        <div class="example-element-detail row"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <div class="col-2">
+                                <img src="{{ element.movieDetails.poster }}" alt="Poster" style="max-width: 100%; border-radius: 5px; margin-bottom: 3%;"/>
+                            </div>
+                            <div class="col-10">
+                                <hr style="margin-top: 0;"/>
+                                <div class="row justify-content-between" style="display: flex; align-items: center;">
+                                    <div class="col-3">
+                                        <p style="color: #707070; margin-bottom: 0; font-size: 1.2em;">Last Review:</p>
+                                    </div>
+                                    <div class="col-3" style="display: flex; justify-content: flex-end;">
+                                        <button mat-stroked-button>Edit This Review</button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p style="font-size: 1.1em; line-height: 1.5em; margin-top: 1.5%;">"{{ element.reviews[0].reviewText }}"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="tableDisplayCols"></tr>
+                <tr mat-row *matRowDef="let element; columns: tableDisplayCols;"
+                    class="example-element-row"
+                    [class.example-expanded-row]="expandedElement === element"
+                    (click)="expandedElement = expandedElement === element ? null : element">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+                <!-- <tr mat-header-row *matHeaderRowDef="tableDisplayCols"></tr>
+                <tr mat-row class="data-row" *matRowDef="let row; columns: tableDisplayCols;"></tr> -->
+            </table>
+        </div>
+
+        <!-- <mat-paginator #paginator *ngIf="numResults > 12"
+            style="margin-top: 2%; border-radius: 5px;"
+            [length]="numResults"
+            [pageSize]="12"
+            [pageSizeOptions]="[12, 30, 60]"
+            aria-label="Select page"
+            (page)="handlePagination($event)">
+        </mat-paginator> -->
+
+
+
+        <!-- <div class="col-12" style="outline: 1px solid limegreen;">
             <p>Some placeholder garbage for now...</p>
             <ul>
                 <ng-container *ngFor="let filmEntry of reviewsList">
@@ -9,6 +112,14 @@
                     <button (click)="ishClicked(filmEntry)">CLICK THIS ISH</button>
                 </ng-container>
             </ul>
-        </div>
+        </div> -->
     </div>
+
+    <ng-template #noFilms>
+        <div class="col-12" style="padding-top: 10%; margin: auto; text-align: center;">
+            <img src="../../assets/images/no-items-found.png" alt="No Items Found" style="opacity: 40%; height: 250px;"/>
+            <h1 style="color: #a1a1a1;">No Reviews Found</h1>
+            <p style="color: #707070;">Add reviews to movies from the Watchlist or Search section</p>
+        </div>
+    </ng-template>
 </div>

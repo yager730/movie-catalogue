@@ -13,9 +13,12 @@
                 <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" />
                 <div>
                     <p class="overview-header" style="color: white; margin: 5% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
+                    
+                    <!-- Want an add new review when review already exists, write a review button when no review exists-->
                     <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 3% 3% 3% 0%;"
                         (click)="goToReviews()">
-                        <mat-icon>create</mat-icon>Leave a Review</button>    
+                        <mat-icon>create</mat-icon>Leave a Review</button>
+
                     <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 3% 0% 3% 0%;"
                         *ngIf="!onWatchlist; else disabledButton"
                         (click)="addToWatchlist()"><mat-icon>add</mat-icon>Add to Watchlist</button>
