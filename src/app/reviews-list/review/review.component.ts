@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterContentInit, Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map, Subscription, take } from 'rxjs';
@@ -28,7 +28,7 @@ export class ReviewComponent implements OnInit {
 
   editMode: boolean = false;
   reviewDataForUser: boolean;
-
+  
   reviewForm: FormGroup;
 
   constructor(private ReviewsService: ReviewsService, private router: Router, private store: Store<fromApp.AppState>) {};
@@ -68,7 +68,7 @@ export class ReviewComponent implements OnInit {
         this.reviews = this.getReviews(this.movie?.movieDetails.id, data.reviewsList);
       }
     })
-  }
+  };
 
   getReviews(id: number, reviewList: movieReviews[]): movieReview [] {
     if (reviewList.map(el => el.movieDetails.id).includes(id)) {

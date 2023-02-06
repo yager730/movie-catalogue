@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { movieInfo } from 'src/app/shared/movie-info.model';
 import * as fromApp from '../../store/app.reducer';
@@ -17,6 +17,9 @@ export class ReviewFormComponent implements OnInit {
   @Input() formData?: {review: movieReview, index: number };
   @Output() formEvent = new EventEmitter<string>();
 
+  minDate: Date;
+  maxDate: Date;
+
   newEntry: boolean;
 
   reviewForm: FormGroup;
@@ -31,6 +34,8 @@ export class ReviewFormComponent implements OnInit {
       rating: new FormControl(this.newEntry ? null : this.formData.review.rating),
       watchDate: new FormControl(this.newEntry ? null : this.formData.review.watchDate)
     });
+    this.minDate = new Date(this.movie.movieDetails.release_date);
+    this.maxDate = new Date();
     console.log (this.reviewForm.value);
   }
 
@@ -40,6 +45,11 @@ export class ReviewFormComponent implements OnInit {
 
   onSubmit() {
     console.log(this.reviewForm.value);
+    
+    if (!this.reviewForm.valid){
+      return;
+    } 
+
     if (this.newEntry) {
       this.store.dispatch(new ReviewsActions.AddReview(
         { movieInfo: this.movie, review: this.reviewForm.value }));

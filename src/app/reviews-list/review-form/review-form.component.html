@@ -18,7 +18,7 @@
     <mat-form-field appearance="outline" style="display: block">
         <mat-label for="reviewText">My Review</mat-label>
         <textarea matInput class="form-control" formControlName="reviewText" 
-            id="reviewText" class="review-text-area" rows="13" 
+            id="reviewText" class="review-text-area" rows="12" 
             value="{{ formData?.review.reviewText }}" placeholder="Write your review here..."></textarea>
     </mat-form-field>
 
@@ -26,11 +26,14 @@
         <mat-form-field appearance="outline" style="margin-right: 3%;">
             <mat-label for="watchDate">Date Watched</mat-label>
             <input matInput class="form-control" formControlName="watchDate" 
-                id="watchDate" value="{{ formData?.review.watchDate }}" [matDatepicker]="picker">
+                id="watchDate" value="{{ formData?.review.watchDate }}" [matDatepicker]="picker"
+                [max]="maxDate" [min]="minDate" required>
             <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-error>Watch date must be no earlier than release and no later than today</mat-error>
             <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+
         <mat-form-field appearance="outline">
             <mat-label for="rating">Rating</mat-label>
             <input matInput
@@ -38,10 +41,12 @@
                 class="form-control"
                 formControlName="rating" 
                 id="rating"
-                min="1"
+                min="0"
                 max="10"
-                type="number">
-            <mat-hint>1-10</mat-hint>
+                step=".5"
+                type="number" required>
+            <mat-hint>0 - 10</mat-hint>
+            <mat-error>Rating must be a multiple of .5 from 0 - 10</mat-error>
         </mat-form-field>
         <span style="flex: 1 1 auto;"></span>
         <button mat-raised-button type="submit" style="margin-right: 1%; background-color: #c2185ca4;">
