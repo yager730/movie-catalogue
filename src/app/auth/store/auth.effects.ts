@@ -148,7 +148,7 @@ export class AuthEffects {
         ofType(AuthActions.SIGNUP),
         map((loginInfo: AuthActions.Signup) => {
             this.http.put(`https://tyager-angular-practice-app-default-rtdb.firebaseio.com/users/${loginInfo.payload.userId}.json`, 
-                { 'watchlist': '' }).pipe(take(1)).subscribe(() => console.log('Finished initializing watchlist!'));
+                { 'watchlist': '', 'userReviews': 'none' }).pipe(take(1)).subscribe(() => console.log('Finished initializing watchlist!'));
         })
     ), {dispatch: false});
 

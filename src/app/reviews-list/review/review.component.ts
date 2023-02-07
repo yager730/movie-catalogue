@@ -47,6 +47,12 @@ export class ReviewComponent implements OnInit {
       // Will need a more robust check here once I actually am able to save reviews
       this.editMode = true;
     } else {
+      if (history.state['edit']) { 
+        if (history.state['reviewData']){
+          this.reviewData = history.state['reviewData'];
+        }
+        this.editMode = true; 
+      }
       console.log('Navigated to page directly, fetching data...')
       this.store.dispatch(new ReviewsActions.LoadMovieInfo());
       this.ReviewsService.fetchMovieData(location.href.split('/').pop())

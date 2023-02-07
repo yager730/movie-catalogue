@@ -62,11 +62,16 @@ export function reviewsReducer(state: State = initState, action: ReviewActions.R
             updatedReviewList = [...state.reviewsList];
             updateIndex = state.reviewsList.findIndex((el) => el.movieDetails.id === action.payload.movieInfo.movieDetails.id);
             updatedReviews = updatedReviewList[updateIndex].reviews.filter((review, index) => index !== action.payload.index);
-            updatedMovieReviews = {
-                movieDetails: action.payload.movieInfo.movieDetails,
-                reviews: updatedReviews
+            if (updatedReviews.length === 0) { 
+                // Remove review data for film entirely
+                updatedReviewList = state.reviewsList.filter((el) => el.movieDetails.id !== action.payload.movieInfo.movieDetails.id);
+            } else {
+                updatedMovieReviews = {
+                    movieDetails: action.payload.movieInfo.movieDetails,
+                    reviews: updatedReviews
+                }
+                updatedReviewList[updateIndex] = updatedMovieReviews;
             }
-            updatedReviewList[updateIndex] = updatedMovieReviews;
             return {
                 ...state,
                 reviewsList: updatedReviewList

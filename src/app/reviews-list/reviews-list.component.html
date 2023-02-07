@@ -56,11 +56,11 @@
                 </ng-container>
                                 
                 <ng-container matColumnDef="expandedDetail">
-                    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+                    <td mat-cell *matCellDef="let film" [attr.colspan]="columnsToDisplayWithExpand.length">
                         <div class="example-element-detail row"
-                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            [@detailExpand]="film == expandedElement ? 'expanded' : 'collapsed'">
                             <div class="col-2">
-                                <img src="{{ element.movieDetails.poster }}" alt="Poster" style="max-width: 100%; border-radius: 5px; margin-bottom: 3%;"/>
+                                <img src="{{ film.movieDetails.poster }}" alt="Poster" style="max-width: 100%; border-radius: 5px; margin-bottom: 3%;"/>
                             </div>
                             <div class="col-10">
                                 <hr style="margin-top: 0;"/>
@@ -69,14 +69,14 @@
                                         <p style="color: #707070; margin-bottom: 0; font-size: 1.2em;">Last Review:</p>
                                     </div>
                                     <div class="col-3" style="display: flex; justify-content: flex-end;">
-                                        <button mat-stroked-button>Edit This Review</button>
+                                        <button mat-stroked-button (click)="editReview(film)">Edit This Review</button>
                                     </div>
                                 </div>
                                 <div class="row" style="height: 100%; max-height: 200px; overflow-y: scroll; 
                                     margin: 10px 0px; background-color: #202020ab; border-radius: 10px;">
-                                    <p *ngIf="element.reviews[0].reviewText; else noReviewText" 
+                                    <p *ngIf="film.reviews[0].reviewText; else noReviewText" 
                                     style="font-size: 1.1em; line-height: 1.5em; margin-top: 1%; white-space: pre-wrap;">
-                                    {{ element.reviews[0].reviewText }}</p>
+                                    {{ film.reviews[0].reviewText }}</p>
                                     <ng-template #noReviewText>
                                         <p style="font-size: 1.1em; line-height: 1.5em; margin-top: 1%;">No text for this review entry...</p>
                                     </ng-template>

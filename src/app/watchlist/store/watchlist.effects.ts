@@ -56,7 +56,7 @@ export class WatchlistEffects {
                                 { this.store.dispatch(new WatchlistActions.LoadUserWatchlist(userWatchlistMovies)) } 
                         })
                     });
-                }
+                } else { this.store.dispatch(new WatchlistActions.LoadUserWatchlist([])); }
             }))
         })
     ), {dispatch: false});
@@ -75,9 +75,9 @@ export class WatchlistEffects {
                         const newData = (resData.split(',').concat(movieId)).join(',');
                         console.log('new watchlist: ')
                         console.log(newData)
-                        return this.http.put(`${firebaseURL}/users/${userAuthData.user.id}.json`, { watchlist: newData }).subscribe();
+                        return this.http.patch(`${firebaseURL}/users/${userAuthData.user.id}.json`, { watchlist: newData }).subscribe();
                     } else {
-                        return this.http.put(`${firebaseURL}/users/${userAuthData.user.id}.json`, { watchlist: movieId }).subscribe();
+                        return this.http.patch(`${firebaseURL}/users/${userAuthData.user.id}.json`, { watchlist: movieId }).subscribe();
                     }
                 })
             });
@@ -94,7 +94,7 @@ export class WatchlistEffects {
                     const movieId = filmData.payload.toString();
                     console.log(movieId);
                     const newData = resData.split(',').filter(el => el !== movieId).join(',');
-                    return this.http.put(`${firebaseURL}/users/${userAuthData.user.id}.json`, { watchlist: newData }).subscribe();
+                    return this.http.patch(`${firebaseURL}/users/${userAuthData.user.id}.json`, { watchlist: newData }).subscribe();
                 })
             });
         })

@@ -22,6 +22,7 @@ import { SearchEffects } from './search/store/search.effects';
 import { WatchlistEffects } from './watchlist/store/watchlist.effects';
 import { environment } from 'src/environments/environments';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { ReviewsEffects } from './reviews-list/store/reviews.effects';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     SharedModule,
     StoreModule.forRoot(fromApp.appReducer),
     StoreDevtoolsModule.instrument({ logOnly: environment.production }),
-    EffectsModule.forRoot([AuthEffects, SearchEffects, WatchlistEffects]),
+    EffectsModule.forRoot([AuthEffects, SearchEffects, WatchlistEffects, ReviewsEffects]),
     NgbModule
   ],
   providers: [ {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true} ],

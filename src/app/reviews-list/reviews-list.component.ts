@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
-import { movieReview, movieReviews } from './review.model';
+import { movieReviews } from './review.model';
 import * as fromApp from '../store/app.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Utils from '../shared/utils';
@@ -45,7 +45,12 @@ export class ReviewsListComponent implements OnInit, OnDestroy {
   }
 
   goToAddReview(film: movieReviews) {
-    this.router.navigate([`./id/${film.movieDetails.id}`], { relativeTo: this.route })
+    this.router.navigate([`./id/${film.movieDetails.id}`], { relativeTo: this.route, state: { edit: true} });
+  }
+
+  editReview(film: movieReviews) {
+    this.router.navigate([`./id/${film.movieDetails.id}`], { relativeTo: this.route, 
+      state: { edit: true, reviewData: {review: film.reviews[0], index: 0} } });
   }
 
   getReleaseDate(film: MovieDetails) { return Utils.getReleaseDate({ movieDetails: film, movieCrew: null, movieImagePaths: null }) };
