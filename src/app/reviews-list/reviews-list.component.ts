@@ -44,6 +44,10 @@ export class ReviewsListComponent implements OnInit, OnDestroy {
     this.router.navigate([`./id/${film.movieDetails.id}`], { relativeTo: this.route });
   }
 
+  goToAddReview(film: movieReviews) {
+    this.router.navigate([`./id/${film.movieDetails.id}`], { relativeTo: this.route })
+  }
+
   getReleaseDate(film: MovieDetails) { return Utils.getReleaseDate({ movieDetails: film, movieCrew: null, movieImagePaths: null }) };
   getRating(film: MovieDetails) { return Utils.getRating({ movieDetails: film, movieCrew: null, movieImagePaths: null }) };
 

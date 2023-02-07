@@ -1,11 +1,21 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { movieInfo } from 'src/app/shared/movie-info.model';
 import * as fromApp from '../../store/app.reducer';
 import * as ReviewsActions from '../store/reviews.actions';
 import { Store } from '@ngrx/store';
 import { movieReview } from '../review.model';
+
+export function ratingValidator(): ValidatorFn {
+  return (control:AbstractControl) : ValidationErrors | null => {
+    const value: number = control.value;
+    if (!value) {
+        return null;
+    }
+    return !Number.isInteger(value * 2) ? { validRating : true } : null;
+  }
+}
 
 @Component({
   selector: 'app-review-form',
@@ -31,8 +41,8 @@ export class ReviewFormComponent implements OnInit {
     this.newEntry = this.formData ? false : true;
     this.reviewForm = new FormGroup({
       reviewText: new FormControl(this.newEntry ? null : this.formData.review.reviewText),
-      rating: new FormControl(this.newEntry ? null : this.formData.review.rating),
-      watchDate: new FormControl(this.newEntry ? null : this.formData.review.watchDate)
+      rating: new FormControl(this.newEntry ? null : this.formData.review.rating, [Validators.required, ratingValidator()]),
+      watchDate: new FormControl(this.newEntry ? null : this.formData.review.watchDate, Validators.required)
     });
     this.minDate = new Date(this.movie.movieDetails.release_date);
     this.maxDate = new Date();
