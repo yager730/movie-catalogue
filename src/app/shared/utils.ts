@@ -1,4 +1,5 @@
 // Utility helper functions
+import { movieReview } from "../reviews-list/review.model";
 import { movieInfo } from "./movie-info.model";
 
 export function getDirector(film: movieInfo) {

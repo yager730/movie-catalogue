@@ -17,7 +17,7 @@
 
                 <ng-container matColumnDef="lastWatched">
                     <th mat-header-cell *matHeaderCellDef>Last Watched</th>
-                    <td mat-cell *matCellDef="let film"> {{ film.reviews[0].watchDate.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric" }) }} </td>
+                    <td mat-cell *matCellDef="let film"> {{ formatDate(film.reviews[0].watchDate) }} </td>
                 </ng-container>
                 
                 <ng-container matColumnDef="timesLogged">

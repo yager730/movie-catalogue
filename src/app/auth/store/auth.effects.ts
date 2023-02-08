@@ -8,6 +8,7 @@ import * as AuthActions from './auth.actions';
 import { User } from '../user.model';
 import { AuthService, AuthResponseData } from '../auth.service';
 import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
+import * as ReviewsActions from '../../reviews-list/store/reviews.actions';
 
 const handleAuthentication = (expiresIn: number, email: string, userId: string, token: string, newUser: boolean = false) => {
     const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
@@ -136,11 +137,19 @@ export class AuthEffects {
         )
     })
 
-    getWatchlist = createEffect(() => this.actions$.pipe(
+    getUserWatchlistOnLogin = createEffect(() => this.actions$.pipe(
         ofType(AuthActions.LOGIN),
         map((loginInfo: AuthActions.Login) => {            
-            console.log('Fetching user watchlist...');
+            console.log('Fetching user watchlist data...');
             return new WatchlistActions.FetchUserWatchlist(loginInfo.payload.userId);
+        })
+    ));
+
+    getUserReviewsOnLogin = createEffect(() => this.actions$.pipe(
+        ofType(AuthActions.LOGIN),
+        map((loginInfo: AuthActions.Login) => {            
+            console.log('Fetching user review data...');
+            return new ReviewsActions.FetchUserReviewData(loginInfo.payload.userId);
         })
     ));
 

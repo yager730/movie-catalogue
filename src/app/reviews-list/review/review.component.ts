@@ -1,4 +1,4 @@
-import { AfterContentInit, Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map, Subscription, take } from 'rxjs';
@@ -82,7 +82,8 @@ export class ReviewComponent implements OnInit {
     } else { return [] }
   }
 
-  formatDate(date: Date) {
+  formatDate(dateString: string) {
+    const date = new Date(dateString);
     return date.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric" });
   }
 

@@ -25,6 +25,11 @@ export function reviewsReducer(state: State = initState, action: ReviewActions.R
     let updatedMovieReviews: movieReviews;
 
     switch (action.type) {
+        case ReviewActions.LOAD_USER_REVIEW_DATA:
+            return {
+                ...state,
+                reviewsList: action.payload
+            }
         case ReviewActions.ADD_REVIEW:
             if (state.reviewsList.map(review => review.movieDetails.id).includes(action.payload.movieInfo.movieDetails.id)) {
                 updatedReviewList = [...state.reviewsList];
@@ -40,6 +45,7 @@ export function reviewsReducer(state: State = initState, action: ReviewActions.R
                     movieDetails: action.payload.movieInfo.movieDetails, 
                     reviews: [action.payload.review] }]
             }
+            console.log(action.payload.review)
             return {
                 ...state,
                 reviewsList: updatedReviewList

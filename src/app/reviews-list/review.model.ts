@@ -3,7 +3,7 @@ import { MovieDetails, movieInfo } from "../shared/movie-info.model"
 export interface movieReview {
     rating: number,
     reviewText: string,
-    watchDate: Date
+    watchDate: string
     // If you want to track reviews by when they were most recently edited...
     // lastEdited: Date
 };

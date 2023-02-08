@@ -32,7 +32,11 @@ export class ReviewFormComponent implements OnInit {
 
   newEntry: boolean;
 
-  reviewForm: FormGroup;
+  reviewForm: FormGroup<{
+    reviewText: FormControl<string>;
+    rating: FormControl<number>;
+    watchDate: FormControl<string | Date>; 
+  }>;
 
   constructor(private route: ActivatedRoute, private router: Router, 
     private store: Store<fromApp.AppState>) {};
@@ -40,9 +44,9 @@ export class ReviewFormComponent implements OnInit {
   ngOnInit() {
     this.newEntry = this.formData ? false : true;
     this.reviewForm = new FormGroup({
-      reviewText: new FormControl(this.newEntry ? null : this.formData.review.reviewText),
-      rating: new FormControl(this.newEntry ? null : this.formData.review.rating, [Validators.required, ratingValidator()]),
-      watchDate: new FormControl(this.newEntry ? null : this.formData.review.watchDate, Validators.required)
+      reviewText: new FormControl<string>(this.newEntry ? null : this.formData.review.reviewText),
+      rating: new FormControl<number>(this.newEntry ? null : this.formData.review.rating, [Validators.required, ratingValidator()]),
+      watchDate: new FormControl<Date | string>(this.newEntry ? null : this.formData.review.watchDate, Validators.required)
     });
     this.minDate = new Date(this.movie.movieDetails.release_date);
     this.maxDate = new Date();
@@ -54,17 +58,54 @@ export class ReviewFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.reviewForm.value);
-    
     if (!this.reviewForm.valid){
       return;
     } 
 
     if (this.newEntry) {
-      this.store.dispatch(new ReviewsActions.AddReview(
-        { movieInfo: this.movie, review: this.reviewForm.value }));
-    } else  { this.store.dispatch(new ReviewsActions.EditReview(
-      { movieInfo: this.movie, index: this.formData.index, review: this.reviewForm.value })); }
+      if (this.reviewForm.value['watchDate'] instanceof Date) {
+        console.log('Did a thing')
+        this.store.dispatch(new ReviewsActions.AddReview(
+          { movieInfo: this.movie, 
+            review: { 
+              rating: this.reviewForm.value['rating'],
+              reviewText: this.reviewForm.value['reviewText'],
+              watchDate: new Date(this.reviewForm.value['watchDate']).toISOString() } 
+          }
+        ));
+      } else {
+        this.store.dispatch(new ReviewsActions.AddReview(
+          { movieInfo: this.movie, 
+            review: { 
+              rating: this.reviewForm.value['rating'],
+              reviewText: this.reviewForm.value['reviewText'],
+              watchDate: this.reviewForm.value['watchDate'] } 
+          }
+        ));
+      }
+    } else { 
+      if (this.reviewForm.value['watchDate'] instanceof Date) {
+        console.log('edit review where watchdate is a date object')
+        this.store.dispatch(new ReviewsActions.EditReview(
+          { movieInfo: this.movie, index: this.formData.index, 
+            review: { 
+              rating: this.reviewForm.value['rating'],
+              reviewText: this.reviewForm.value['reviewText'],
+              watchDate: new Date(this.reviewForm.value['watchDate']).toISOString() } 
+          }
+        )); 
+      } else {
+        console.log('edit review where watchdate is a string')
+        this.store.dispatch(new ReviewsActions.EditReview(
+          { movieInfo: this.movie, index: this.formData.index, 
+            review: { 
+              rating: this.reviewForm.value['rating'],
+              reviewText: this.reviewForm.value['reviewText'],
+              watchDate: this.reviewForm.value['watchDate'] } 
+          }
+        )); 
+      }
+    }
     this.formEvent.emit('Submitted Review');
   }
 

@@ -40,6 +40,11 @@ export class ReviewsListComponent implements OnInit, OnDestroy {
     })
   }
 
+  formatDate(dateString: string) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-us', { year:"numeric", month:"long", day:"numeric" });
+  }
+
   goToReviews(film: movieReviews) {
     this.router.navigate([`./id/${film.movieDetails.id}`], { relativeTo: this.route });
   }
