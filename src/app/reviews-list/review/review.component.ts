@@ -92,6 +92,7 @@ export class ReviewComponent implements OnInit {
   }
 
   goBackToLastPage() {
+    console.log(document.referrer);
     if(document.referrer == "") {
       // If user manually enters review page URL...
       this.router.navigate(['/search']);

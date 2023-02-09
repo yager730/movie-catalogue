@@ -4,8 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { movieInfo } from 'src/app/shared/movie-info.model';
 import * as fromApp from '../../store/app.reducer';
 import * as ReviewsActions from '../store/reviews.actions';
+import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
 import { Store } from '@ngrx/store';
 import { movieReview } from '../review.model';
+import { Subscription, take } from 'rxjs';
 
 export function ratingValidator(): ValidatorFn {
   return (control:AbstractControl) : ValidationErrors | null => {
@@ -26,9 +28,17 @@ export class ReviewFormComponent implements OnInit {
   @Input() movie: movieInfo;
   @Input() formData?: {review: movieReview, index: number };
   @Output() formEvent = new EventEmitter<string>();
+  
+  watchlistSub: Subscription;
+  filmInWatchlist: boolean;
 
   minDate: Date;
   maxDate: Date;
+
+  displayConfirmationPrompt: boolean = false;
+  displayPromptText: string;
+  promptConfirmText: string;
+  promptDenyText: string;
 
   newEntry: boolean;
 
@@ -51,6 +61,10 @@ export class ReviewFormComponent implements OnInit {
     this.minDate = new Date(this.movie.movieDetails.release_date);
     this.maxDate = new Date();
     console.log (this.reviewForm.value);
+    this.watchlistSub = this.store.select('watchlist').pipe(take(1))
+    .subscribe(watchlistData => {
+      this.filmInWatchlist = watchlistData.films.map(film => film.movieDetails.id).includes(this.movie.movieDetails.id); 
+    })
   }
 
   goBackToReviews() {
@@ -61,61 +75,69 @@ export class ReviewFormComponent implements OnInit {
     if (!this.reviewForm.valid){
       return;
     } 
+    const formWatchDate = this.reviewForm.value['watchDate'];
 
     if (this.newEntry) {
-      if (this.reviewForm.value['watchDate'] instanceof Date) {
-        console.log('Did a thing')
-        this.store.dispatch(new ReviewsActions.AddReview(
-          { movieInfo: this.movie, 
-            review: { 
-              rating: this.reviewForm.value['rating'],
-              reviewText: this.reviewForm.value['reviewText'],
-              watchDate: new Date(this.reviewForm.value['watchDate']).toISOString() } 
-          }
-        ));
+      // If user is reviewing a movie in their watchlist, ask if user wants it removed...
+      if (this.filmInWatchlist) {
+        this.confirmationPrompt('Remove from watchlist');
       } else {
-        this.store.dispatch(new ReviewsActions.AddReview(
-          { movieInfo: this.movie, 
-            review: { 
-              rating: this.reviewForm.value['rating'],
-              reviewText: this.reviewForm.value['reviewText'],
-              watchDate: this.reviewForm.value['watchDate'] } 
-          }
-        ));
+        this.submitNewReview();
       }
     } else { 
-      if (this.reviewForm.value['watchDate'] instanceof Date) {
-        console.log('edit review where watchdate is a date object')
-        this.store.dispatch(new ReviewsActions.EditReview(
-          { movieInfo: this.movie, index: this.formData.index, 
-            review: { 
-              rating: this.reviewForm.value['rating'],
-              reviewText: this.reviewForm.value['reviewText'],
-              watchDate: new Date(this.reviewForm.value['watchDate']).toISOString() } 
-          }
-        )); 
-      } else {
-        console.log('edit review where watchdate is a string')
-        this.store.dispatch(new ReviewsActions.EditReview(
-          { movieInfo: this.movie, index: this.formData.index, 
-            review: { 
-              rating: this.reviewForm.value['rating'],
-              reviewText: this.reviewForm.value['reviewText'],
-              watchDate: this.reviewForm.value['watchDate'] } 
-          }
-        )); 
-      }
+      this.store.dispatch(new ReviewsActions.EditReview(
+        { movieInfo: this.movie, index: this.formData.index, 
+          review: { 
+            rating: this.reviewForm.value['rating'],
+            reviewText: this.reviewForm.value['reviewText'],
+            watchDate: (formWatchDate instanceof Date) ? new Date(formWatchDate).toISOString() : formWatchDate 
+          } 
+        }
+      ));
+      this.formEvent.emit('Submitted Review'); 
     }
+  }
+
+  submitAndRemoveFromWatchlist(remove: boolean) {
+    if (remove) {
+      this.store.dispatch(new WatchlistActions.RemoveFromWatchlist(this.movie.movieDetails.id));
+    }
+    this.submitNewReview();
+  }
+
+  submitNewReview() {
+    const formWatchDate = this.reviewForm.value['watchDate'];
+    this.store.dispatch(new ReviewsActions.AddReview(
+      { movieInfo: this.movie, 
+        review: { 
+          rating: this.reviewForm.value['rating'],
+          reviewText: this.reviewForm.value['reviewText'],
+          watchDate: (formWatchDate instanceof Date) ? new Date(formWatchDate).toISOString() : formWatchDate
+        }
+      }
+    ));
     this.formEvent.emit('Submitted Review');
+  }
+
+  confirmationPrompt(promptType: string) {
+    switch (promptType) {
+      case 'Remove from watchlist':
+        this.displayConfirmationPrompt = true;
+        this.displayPromptText = "This film was found in your watchlist. Would you like to remove it?"
+        this.promptConfirmText = "Yes, remove from watchlist"
+        this.promptDenyText = "No, keep on watchlist"
+        return;
+      default: 
+        return;
+    }
+  }
+
+  reset() {
+    this.displayConfirmationPrompt = false;
   }
 
   handleCancel() {
     this.formEvent.emit('Cancelled Review');
-  }
-
-  goBackToLastPage() {
-    return;
-    //history.back();
   }
 
   deleteReview() {

@@ -18,6 +18,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   @Input() movie: number;
   movieInfoSubscription: Subscription;
   watchlistSubscription: Subscription;
+  reviewsSubscription: Subscription;
   authSubscription: Subscription;
 
   movieDetails: MovieDetails;
@@ -26,6 +27,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
 
   userLoggedIn: boolean;
   onWatchlist: boolean;
+  inReviewsList: boolean;
   director: string;
   rating: number;
   
@@ -48,6 +50,12 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     .subscribe((results) => {
       this.onWatchlist = results.films.map(el => el.movieDetails.id).includes(this.movie);
     });
+    this.reviewsSubscription = this.store.select('reviews')
+    .pipe(map(reviewsListState => reviewsListState))
+    .subscribe((results) => {
+      console.log(results);
+      this.inReviewsList = results.reviewsList.map(el => el.movieDetails.id).includes(this.movie);
+    });
     this.authSubscription = this.store.select('auth')
     .pipe(map(authState => authState))
     .subscribe((results) => {
@@ -55,13 +63,17 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
     })
   }
 
-  goToReviews() {
+  goToAddReview() {
     this.router.navigate([`reviews/id/${this.movieDetails.id}`], {state: {
       movieInfo: {
         movieDetails: this.movieDetails,
         movieCrew: this.movieCrew,
         movieImages: this.movieImages }
     }});
+  }
+
+  goToUserReviews() {
+    this.router.navigate([`reviews/id/${this.movieDetails.id}`]);
   }
 
   addToWatchlist() {
@@ -75,6 +87,7 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.movieInfoSubscription.unsubscribe();
     this.watchlistSubscription.unsubscribe();
+    this.reviewsSubscription.unsubscribe();
     this.authSubscription.unsubscribe();
   }
 }

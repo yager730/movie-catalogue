@@ -1,0 +1,33 @@
+.backdrop {
+    position: absolute;
+    border-radius: 10px;
+    top: -2%;
+    left: -1%;
+    right: 2.5%;
+    bottom: 2%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+}
+
+.alert-box {
+    position: absolute;
+    top: 20%;
+    left: 8.25%;
+    width: 80%;
+    right: 10.25%;
+    padding: 16px;
+    z-index: 100;
+    background: #d43a2f;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .30);
+    border-radius: 20px;
+}
+
+.alert-box-actions {
+    margin-top: 5%;
+    text-align: right;
+}
+
+.alert-box-actions button {
+    margin-right: 2%;
+    background-color: #8d2119e0;
+}

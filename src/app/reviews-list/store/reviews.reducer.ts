@@ -30,6 +30,8 @@ export function reviewsReducer(state: State = initState, action: ReviewActions.R
                 ...state,
                 reviewsList: action.payload
             }
+        case ReviewActions.GET_CURRENT_REVIEW_DATA:
+            return { ...state }
         case ReviewActions.ADD_REVIEW:
             if (state.reviewsList.map(review => review.movieDetails.id).includes(action.payload.movieInfo.movieDetails.id)) {
                 updatedReviewList = [...state.reviewsList];

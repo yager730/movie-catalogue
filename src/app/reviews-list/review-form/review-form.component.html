@@ -1,57 +1,79 @@
-<div style="display: flex; align-items: center; margin-bottom: 10px;">
+<div style="position: absolute; width: inherit;">
+    <div *ngIf="displayConfirmationPrompt">
+        <app-confirmation-prompt message="{{ displayPromptText }}" 
+            confirmPrompt="{{ promptConfirmText }}" denyPrompt="{{ promptDenyText }}"
+            (close)="reset()" (confirm)="submitAndRemoveFromWatchlist(true)" (deny)="submitAndRemoveFromWatchlist(false)">
+        </app-confirmation-prompt>
+    </div>
 
-    <div *ngIf="newEntry" style="display: flex; align-items: center;">
-        <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button>
-        <p style="font-weight: bold; color:#707070; margin: 0%;">
-            New Review for {{ this.movie.movieDetails.title }}</p>
-    </div> 
-    <div *ngIf="!newEntry" style="display: flex; align-items: center;">
-        <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button>
-        <p style="font-weight: bold; color:#707070; margin: 0%;">
-            &nbsp;Editing Review for {{ this.movie.movieDetails.title }}</p>
-    </div>    
-    <span style="flex: 1 1 auto;"></span>
-    <button mat-stroked-button color="accent" (click)="handleCancel()"><mat-icon>remove_red_eye</mat-icon>See All My Reviews</button>
-</div>
+    <div style="width: 96.5%;">
+        <div class="row">
+            <div class="col-12" style="display: flex;">
+                <div *ngIf="newEntry" style="display: flex; align-items: center;">
+                    <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button>
+                    <p style="font-weight: bold; color:#707070; margin: 0%;">
+                        New Review for {{ this.movie.movieDetails.title }}</p>
+                </div> 
+                <div *ngIf="!newEntry" style="display: flex; align-items: center;">
+                    <button mat-icon-button color="accent" (click)="handleCancel()"><mat-icon>keyboard_backspace</mat-icon></button>
+                    <p style="font-weight: bold; color:#707070; margin: 0%;">
+                        &nbsp;Editing Review for {{ this.movie.movieDetails.title }}</p>
+                </div> 
+                <span style="flex: 1 1 auto;"></span>   
+                <button mat-stroked-button color="accent" (click)="handleCancel()"><mat-icon>remove_red_eye</mat-icon>See All My Reviews</button>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-12">
+                <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="outline" style="display: block">
+                        <mat-label for="reviewText">My Review</mat-label>
+                        <textarea matInput class="form-control" formControlName="reviewText" 
+                            id="reviewText" class="review-text-area" rows="12" 
+                            value="{{ formData?.review.reviewText }}" placeholder="Write your review here..."></textarea>
+                    </mat-form-field>
+                
+                    <div style="margin-bottom: 2%; display: flex; align-items: baseline;">
+                        <mat-form-field appearance="outline" style="margin-right: 3%;">
+                            <mat-label for="watchDate">Date Watched</mat-label>
+                            <input matInput class="form-control" formControlName="watchDate" 
+                                id="watchDate" value="{{ formData?.review.watchDate }}" [matDatepicker]="picker"
+                                [max]="maxDate" [min]="minDate" required>
+                            <mat-hint>MM/DD/YYYY</mat-hint>
+                            <mat-error>Watch date must be no earlier than release and no later than today</mat-error>
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                
+                        <mat-form-field appearance="outline">
+                            <mat-label for="rating">Rating</mat-label>
+                            <input matInput
+                                value="{{ formData?.review.rating }}"
+                                class="form-control"
+                                formControlName="rating" 
+                                id="rating"
+                                min="0"
+                                max="10"
+                                step=".5"
+                                type="number" required>
+                            <mat-hint>0 - 10</mat-hint>
+                            <mat-error>Rating must be a multiple of .5 from 0 - 10</mat-error>
+                        </mat-form-field>
+                        <span style="flex: 1 1 auto;"></span>
+                        <button mat-raised-button type="submit" style="margin-right: 1%; background-color: #c2185ca4;">
+                            <mat-icon>save_alt</mat-icon>Save Review</button>
+                        <button mat-raised-button *ngIf="!newEntry" style="margin-right: 1%; background-color: #c2185ca4;" (click)="deleteReview()">
+                            <mat-icon>delete</mat-icon>Delete Review</button>
+                    </div>  
+                </form>
+            </div>
+        </div>
+    </div>
 
-<form [formGroup]="reviewForm" (ngSubmit)="onSubmit()">
-    <mat-form-field appearance="outline" style="display: block">
-        <mat-label for="reviewText">My Review</mat-label>
-        <textarea matInput class="form-control" formControlName="reviewText" 
-            id="reviewText" class="review-text-area" rows="12" 
-            value="{{ formData?.review.reviewText }}" placeholder="Write your review here..."></textarea>
-    </mat-form-field>
 
-    <div style="margin-bottom: 2%; display: flex; align-items: baseline;">
-        <mat-form-field appearance="outline" style="margin-right: 3%;">
-            <mat-label for="watchDate">Date Watched</mat-label>
-            <input matInput class="form-control" formControlName="watchDate" 
-                id="watchDate" value="{{ formData?.review.watchDate }}" [matDatepicker]="picker"
-                [max]="maxDate" [min]="minDate" required>
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-error>Watch date must be no earlier than release and no later than today</mat-error>
-            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label for="rating">Rating</mat-label>
-            <input matInput
-                value="{{ formData?.review.rating }}"
-                class="form-control"
-                formControlName="rating" 
-                id="rating"
-                min="0"
-                max="10"
-                step=".5"
-                type="number" required>
-            <mat-hint>0 - 10</mat-hint>
-            <mat-error>Rating must be a multiple of .5 from 0 - 10</mat-error>
-        </mat-form-field>
+    <!-- <div style="display: flex; align-items: center; margin-bottom: 10px;">
         <span style="flex: 1 1 auto;"></span>
-        <button mat-raised-button type="submit" style="margin-right: 1%; background-color: #c2185ca4;">
-            <mat-icon>save_alt</mat-icon>Save Review</button>
-        <button mat-raised-button *ngIf="!newEntry" style="margin-right: 1%; background-color: #c2185ca4;" (click)="deleteReview()">
-            <mat-icon>delete</mat-icon>Delete Review</button>
-    </div>  
-</form>
+    </div> -->
+    
+</div>

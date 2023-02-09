@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environments';
 import { CrewResponseData, MovieDetailsResponseData, MovieImagesResponseData, SearchResponseData } from './api-response.interfaces';
 
 import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
+import * as ReviewsActions from '../../reviews-list/store/reviews.actions';
 import * as SearchActions from './search.actions';
 
 const baseURL = 'https://api.themoviedb.org/3';
@@ -141,5 +142,10 @@ export class SearchEffects {
     updateWatchlist = createEffect(() => this.actions$.pipe(
         ofType(SearchActions.GET_SELECTED_MOVIE_INFO),
         map(() => new WatchlistActions.GetUpdatedWatchlist())
+    ))
+
+    getCurrentReviews = createEffect(() => this.actions$.pipe(
+        ofType(SearchActions.GET_SELECTED_MOVIE_INFO),
+        map(() => new ReviewsActions.GetCurrentReviews())
     ))
 }

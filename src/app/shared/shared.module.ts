@@ -19,10 +19,12 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
+import { ConfirmationPromptComponent } from "./confirmation-prompt/confirmation-prompt.component";
 
 @NgModule({
     declarations: [
         AlertComponent,
+        ConfirmationPromptComponent,
         LoadingSpinnerComponent
     ],
     imports: [
@@ -31,6 +33,7 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
     exports: [
         CommonModule,
         AlertComponent,
+        ConfirmationPromptComponent,
         LoadingSpinnerComponent,
         MatButtonModule, 
         MatCardModule, 

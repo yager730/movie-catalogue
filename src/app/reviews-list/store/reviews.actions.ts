@@ -2,8 +2,9 @@ import { Action } from '@ngrx/store';
 import { movieInfo } from 'src/app/shared/movie-info.model';
 import { movieReview, movieReviews } from '../review.model';
 
-export const FETCH_USER_REVIEW_DATA = '[Review] Fetch User Review Data';
-export const LOAD_USER_REVIEW_DATA  = '[Review] Load User Review Data';
+export const FETCH_USER_REVIEW_DATA   = '[Review] Fetch User Review Data';
+export const LOAD_USER_REVIEW_DATA    = '[Review] Load User Review Data';
+export const GET_CURRENT_REVIEW_DATA  = '[Review] Get Current Review Data';
 export const ADD_REVIEW    = '[Review] Add Review';
 export const EDIT_REVIEW   = '[Review] Edit Review';
 export const REMOVE_REVIEW = '[Review] Remove Review';
@@ -18,6 +19,10 @@ export class FetchUserReviewData implements Action {
 export class LoadUserReviewData implements Action {
     readonly type = LOAD_USER_REVIEW_DATA;
     constructor (public payload: movieReviews[]) {}
+}
+
+export class GetCurrentReviews implements Action {
+    readonly type = GET_CURRENT_REVIEW_DATA;
 }
 
 export class AddReview implements Action {
@@ -44,6 +49,6 @@ export class MovieInfoLoaded implements Action {
 }
 
 export type ReviewActions = 
-FetchUserReviewData | LoadUserReviewData |
+FetchUserReviewData | LoadUserReviewData | GetCurrentReviews |
 AddReview | EditReview | RemoveReview |
 LoadMovieInfo | MovieInfoLoaded
