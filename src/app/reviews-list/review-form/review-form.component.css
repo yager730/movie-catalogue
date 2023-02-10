@@ -1,7 +1,16 @@
 .review-text-area {
     resize: none;
+    padding: 0px 20px 0px 10px;
 }
 
 .ng-star-inserted {
     margin: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(45, 45, 45, .5);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(156, 156, 156, 0.5);
 }
