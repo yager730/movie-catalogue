@@ -2,7 +2,7 @@
 
 <ng-template #detailsCard>
 <mat-card style="margin-bottom: 5%;">
-    <mat-card-header style="background-image: linear-gradient( #c2185ca4, #424242);">
+    <mat-card-header>
         <mat-card-title>{{ movieDetails?.title }} {{ movieDetails?.release_date ? '(' + movieDetails?.release_date.substring(0,4) + ')' : '' }}</mat-card-title>
         <mat-card-subtitle class="tagline">{{ movieDetails?.tagline }}</mat-card-subtitle>
         <mat-card-subtitle class="director" style="margin-top: 10px; padding-bottom: 1%;">Directed by {{ director }}</mat-card-subtitle>
@@ -10,9 +10,9 @@
     <div class="row">
         <div class="col-6">
             <mat-card-content>
-                <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" />
+                <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" (load)="posterLoaded()"/>
                 <div>
-                    <p class="overview-header" style="color: white; margin: 5% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
+                    <p class="overview-header no-highlight" style="margin: 5% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
                     
                     <!-- Go directly to add review if no review data exists for movie -->
                     <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 3% 3% 3% 0%;"
@@ -49,8 +49,8 @@
                 <p>{{ movieDetails?.overview }}</p>
                 <mat-card-subtitle style="font-style: italic; color: #888888; margin-top: 2%;">
                     Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
-                <mat-list style="margin-top: 3%">
-                    <div><p class="overview-header">Featuring</p></div>
+                <div><p class="overview-header"  style="margin-top: 5%">Featuring</p></div>
+                <mat-list>
                     <mat-list-item *ngFor="let castMember of movieCrew?.cast.slice(0, 5); let i = index; first as isFirst"
                     [class.first]="isFirst" style="border-bottom: 1px solid white;">{{ castMember.name }} 
                     <span class="character-text">as {{ castMember.character }}</span></mat-list-item>

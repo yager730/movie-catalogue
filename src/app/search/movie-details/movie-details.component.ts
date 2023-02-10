@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-movie-details',
   templateUrl: './movie-details.component.html',
-  styleUrls: ['./movie-details.component.css']
+  styleUrls: ['./movie-details.component.scss']
 })
 export class MovieDetailsComponent implements OnInit, OnDestroy {
   detailsLoaded = true;
@@ -82,6 +82,11 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       movieCrew: this.movieCrew,
       movieImagePaths: this.movieImages
     }));
+  }
+
+  posterLoaded() {
+    console.log('Poster loaded!');
+    //Vibrant.from(this.movieDetails.poster).getPalette().then(function(palette) { console.log(palette)});
   }
 
   ngOnDestroy(): void {

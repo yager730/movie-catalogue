@@ -1,3 +1,5 @@
+@import "../../styles.scss";
+
 .container {
     padding-top: 2%;
 }
@@ -13,7 +15,7 @@
 .mat-mdc-raised-button.filter-search-button {
     margin-right: 1%;
     /* background-color: #c2185c; */
-    background-color: #c2185ca4;
+    background-color: map-get($primary, 900);
 }
 
 .form-control:-webkit-autofill:focus,

@@ -1,3 +1,5 @@
+@import "../../../styles.scss";
+
 .img-responsive {
     max-width: 100%
 }
@@ -8,6 +10,7 @@
 
 .mat-mdc-card-header {
     border-radius: 25px 25px 0px 0px;
+    background-image: linear-gradient( map-get($primary, 900), #424242);
 }
 
 .mat-mdc-card-title {
@@ -23,9 +26,17 @@
 .overview-header {
     font-size: medium;
     /* text-decoration: underline; */
-    margin-bottom: 7.5px;
-    color: #c2185ccb;
+    margin-bottom: 5px;
+    color: map-get($primary, 800);
+    color: white;
+    background-image: linear-gradient(to right, map-get($primary, 900), #424242ab);
+    border-radius: 5px;
+    padding-left: 5px;
     font-weight: 700;
+}
+
+.overview-header.no-highlight {
+    background: transparent;
 }
 
 .tagline {
@@ -49,5 +60,5 @@
 }
 
 .movie-actions:not([disabled]) {
-    background-color: #c2185ca4;
+    background-color: map-get($primary, 900);
 }

@@ -9,7 +9,7 @@ import { map, Subscription } from 'rxjs';
 @Component({
   selector: 'app-movie-results-list',
   templateUrl: './movie-results-list.component.html',
-  styleUrls: ['./movie-results-list.component.css']
+  styleUrls: ['./movie-results-list.component.scss']
 })
 export class MovieResultsListComponent {
   @Input() movieResult: SearchResult;
