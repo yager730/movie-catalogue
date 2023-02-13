@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 @Component({
     selector: 'app-confirmation-prompt',
     templateUrl: './confirmation-prompt.component.html',
-    styleUrls: ['./confirmation-prompt.component.css']
+    styleUrls: ['./confirmation-prompt.component.scss']
 })
 export class ConfirmationPromptComponent implements OnInit {
     @Input() message: string;

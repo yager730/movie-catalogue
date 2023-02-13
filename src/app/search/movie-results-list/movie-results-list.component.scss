@@ -1,13 +1,17 @@
 @import "../../../styles.scss";
 
+.mat-mdc-card {
+    background-color: #4c4c4c;
+}
+
 .mat-mdc-card .selected {
-    background-color: map-get($primary, 900);
+    background-color: map-get($primary, 800);
     border-radius: 3px;
 }
 
 .mat-mdc-card:hover {
     border: 1px solid white;
     cursor: pointer;
-    background-color: map-get($primary, 400);
+    background-color: map-get($primary, 300);
 }
 

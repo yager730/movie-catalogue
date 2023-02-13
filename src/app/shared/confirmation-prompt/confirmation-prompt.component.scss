@@ -1,3 +1,5 @@
+@import "../../../styles.scss";
+
 .backdrop {
     position: absolute;
     border-radius: 10px;
@@ -17,7 +19,7 @@
     right: 10.25%;
     padding: 16px;
     z-index: 100;
-    background: #d43a2f;
+    background: map-get($warn, 600);
     box-shadow: 0 2px 8px rgba(0, 0, 0, .30);
     border-radius: 20px;
 }
@@ -29,5 +31,5 @@
 
 .alert-box-actions button {
     margin-right: 2%;
-    background-color: #8d2119e0;
+    background-color: map-get($primary, 700);
 }

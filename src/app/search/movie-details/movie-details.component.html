@@ -1,8 +1,9 @@
-<app-loading-spinner *ngIf="detailsLoaded; else detailsCard" style="display: flex; margin: auto;"></app-loading-spinner>
+<app-loading-spinner *ngIf="!detailsLoaded || !posterLoaded; else detailsCard" style="display: flex; margin: auto;"></app-loading-spinner>
 
 <ng-template #detailsCard>
-<mat-card style="margin-bottom: 5%;">
+<mat-card style="margin-bottom: 5%;" [style.background-image]="posterColor">
     <mat-card-header>
+    <!-- <mat-card-header [ngStyle]="{ 'background': posterColor }"> -->
         <mat-card-title>{{ movieDetails?.title }} {{ movieDetails?.release_date ? '(' + movieDetails?.release_date.substring(0,4) + ')' : '' }}</mat-card-title>
         <mat-card-subtitle class="tagline">{{ movieDetails?.tagline }}</mat-card-subtitle>
         <mat-card-subtitle class="director" style="margin-top: 10px; padding-bottom: 1%;">Directed by {{ director }}</mat-card-subtitle>
@@ -10,27 +11,33 @@
     <div class="row">
         <div class="col-6">
             <mat-card-content>
-                <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive" (load)="posterLoaded()"/>
+                <img src="{{ movieDetails?.poster }}" alt="{{ movieDetails?.title }}" class="img-responsive"/>
                 <div>
-                    <p class="overview-header no-highlight" style="margin: 5% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
-                    
                     <!-- Go directly to add review if no review data exists for movie -->
-                    <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 3% 3% 3% 0%;"
-                        *ngIf="!inReviewsList; else viewReviews" (click)="goToAddReview()">
-                        <mat-icon>create</mat-icon>Leave a Review</button>
+                    <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn || !hasMovieReleased(movieDetails?.release_date)" style="margin: 5% 3% 3% 0%;"
+                    *ngIf="!inReviewsList; else viewReviews" (click)="goToAddReview()">
+                    <mat-icon>create</mat-icon>Leave a Review</button>
                     <ng-template #viewReviews>
-                        <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 3% 3% 3% 0%;"
-                            (click)="goToUserReviews()">
-                            <mat-icon>remove_red_eye</mat-icon>See My Reviews</button>
+                        <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 5% 3% 3% 0%;"
+                        (click)="goToUserReviews()">
+                        <mat-icon>remove_red_eye</mat-icon>See My Reviews</button>
                     </ng-template>
-
-                    <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 3% 0% 3% 0%;"
-                        *ngIf="!onWatchlist; else disabledButton"
-                        (click)="addToWatchlist()"><mat-icon>add</mat-icon>Add to Watchlist</button>
+                    
+                    <button mat-raised-button class="movie-actions" [disabled]="!userLoggedIn" style="margin: 5% 0% 3% 0%;"
+                    *ngIf="!onWatchlist; else disabledButton"
+                    (click)="addToWatchlist()"><mat-icon>add</mat-icon>Add to Watchlist</button>
                     <ng-template #disabledButton>
-                        <button mat-raised-button disabled style="margin: 3% 0% 3% 0%;"
+                        <button mat-raised-button disabled style="margin: 5% 0% 3% 0%;"
                         matTooltip="Remove from watchlist page">
                         <mat-icon>check</mat-icon>Added to Watchlist</button>
+                    </ng-template>
+
+                    <div *ngIf="hasMovieReleased(movieDetails?.release_date); else futureRelease">
+                        <p class="overview-header no-highlight" style="margin: 3% 3% 3% 0%;">Average user score: {{ rating }} / 10</p>
+                        <p class="overview-header no-highlight" style="margin: 2% 3% 3% 0%;">Streaming availability coming soon...</p>
+                    </div>
+                    <ng-template #futureRelease>
+                        <p class="overview-header no-highlight" style="margin: 3% 3% 3% 0%;">Movie hasn't released yet...</p>
                     </ng-template>
                 </div>
             </mat-card-content>
@@ -40,21 +47,23 @@
                 <ngb-carousel *ngIf="movieImages" [showNavigationIndicators]="false">
                     <ng-template ngbSlide *ngFor="let image of movieImages">
                         <div>
-                            <img src="{{ image }}" alt="Associated film image" style="max-width: 100%; opacity: 70%; border-radius: 5px;"/>
+                            <img src="{{ image }}" alt="Associated film image" style="max-width: 100%; opacity: 90%; border-radius: 5px;"/>
                         </div>
                     </ng-template>
                 </ngb-carousel>
                 <br />
-                <div><p class="overview-header">Overview</p></div>
-                <p>{{ movieDetails?.overview }}</p>
-                <mat-card-subtitle style="font-style: italic; color: #888888; margin-top: 2%;">
-                    Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
-                <div><p class="overview-header"  style="margin-top: 5%">Featuring</p></div>
-                <mat-list>
-                    <mat-list-item *ngFor="let castMember of movieCrew?.cast.slice(0, 5); let i = index; first as isFirst"
-                    [class.first]="isFirst" style="border-bottom: 1px solid white;">{{ castMember.name }} 
-                    <span class="character-text">as {{ castMember.character }}</span></mat-list-item>
-                </mat-list>
+                <div style="background: #303030; padding: 10px; border-radius: 20px; opacity: 85%;">
+                    <div><p class="overview-header" [style.background-image]="overviewHeaders">Overview</p></div>
+                    <p style="padding-left: 8px;">{{ movieDetails?.overview }}</p>
+                    <mat-card-subtitle style="font-style: italic; color: #888888; margin-top: 2%; padding-left: 8px;">
+                        Runtime: {{ movieDetails?.runtime }} minutes</mat-card-subtitle>
+                    <div><p class="overview-header" [style.background-image]="overviewHeaders" style="margin-top: 5%">Featuring</p></div>
+                    <mat-list>
+                        <mat-list-item *ngFor="let castMember of movieCrew?.cast.slice(0, 5); let i = index; first as isFirst"
+                        [class.first]="isFirst" style="border-bottom: 1px solid white;">{{ castMember.name }} 
+                        <span class="character-text">as {{ castMember.character }}</span></mat-list-item>
+                    </mat-list>
+                </div>
             </mat-card-content>
         </div>
     </div>

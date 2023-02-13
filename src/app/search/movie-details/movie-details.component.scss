@@ -10,7 +10,7 @@
 
 .mat-mdc-card-header {
     border-radius: 25px 25px 0px 0px;
-    background-image: linear-gradient( map-get($primary, 900), #424242);
+    // background-image: linear-gradient( map-get($primary, 900), #424242);
 }
 
 .mat-mdc-card-title {
@@ -29,9 +29,9 @@
     margin-bottom: 5px;
     color: map-get($primary, 800);
     color: white;
-    background-image: linear-gradient(to right, map-get($primary, 900), #424242ab);
-    border-radius: 5px;
-    padding-left: 5px;
+    background-image: linear-gradient(to right, #505050, #303030ab);
+    border-radius: 10px;
+    padding: 8px;
     font-weight: 700;
 }
 
@@ -60,5 +60,9 @@
 }
 
 .movie-actions:not([disabled]) {
-    background-color: map-get($primary, 900);
+    background-color: map-get($primary, 800);
+}
+
+.movie-actions:is([disabled]) {
+    background-color: map-get($mat-grey, 700);
 }
