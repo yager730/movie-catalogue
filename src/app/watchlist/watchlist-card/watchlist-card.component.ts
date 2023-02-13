@@ -8,7 +8,7 @@ import * as WatchlistActions from '../store/watchlist.actions';
 @Component({
   selector: 'app-watchlist-card',
   templateUrl: './watchlist-card.component.html',
-  styleUrls: ['./watchlist-card.component.css'],
+  styleUrls: ['./watchlist-card.component.scss'],
 })
 export class WatchlistCardComponent {
     

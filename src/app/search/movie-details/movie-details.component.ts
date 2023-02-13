@@ -103,9 +103,11 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
       Vibrant.from(this.movieDetails.poster).getPalette().then((palette: Palette) => { 
         this.posterColor = `linear-gradient( ${palette.DarkMuted.hex}cc, ${palette.Vibrant.hex}cc, ${palette.DarkVibrant.hex}cc`;
         // this.overviewHeaders = `linear-gradient( to right, ${palette.DarkVibrant.hex}cc, #424242)`;
+        this.posterLoaded = true;
       });
-    } 
-    this.posterLoaded = true;
+    } else {
+      this.posterLoaded = true;
+    }
   }
 
   ngOnDestroy(): void {

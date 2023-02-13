@@ -19,11 +19,11 @@
 // hue. Available color palettes: https://material.io/design/color/
 
 $primary: mat-palette($mat-blue-grey, 800);
-$accent: mat-palette($mat-amber, 300, 500, A700);
+$accent: mat-palette($mat-amber, 300);
 
 // The warn palette is optional (defaults to red).
 
-$warn: mat-palette($mat-red, 700, 500, A700);
+$warn: mat-palette($mat-red, 600, 500, A700);
 
 // Create the theme object (a Sass map containing all of the palettes).
 

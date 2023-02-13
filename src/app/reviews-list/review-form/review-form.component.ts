@@ -22,7 +22,7 @@ export function ratingValidator(): ValidatorFn {
 @Component({
   selector: 'app-review-form',
   templateUrl: './review-form.component.html',
-  styleUrls: ['./review-form.component.css']
+  styleUrls: ['./review-form.component.scss']
 })
 export class ReviewFormComponent implements OnInit { 
   @Input() movie: movieInfo;

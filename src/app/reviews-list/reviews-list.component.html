@@ -65,8 +65,8 @@
                             <div class="col-10">
                                 <hr style="margin-top: 0;"/>
                                 <div class="row justify-content-between" style="display: flex; align-items: center;">
-                                    <div class="col-3">
-                                        <p style="color: #707070; margin-bottom: 0; font-size: 1.2em;">Last Review:</p>
+                                    <div class="col-3 expanded-row-header-text">
+                                        <p>Last Review:</p>
                                     </div>
                                     <div class="col-3" style="display: flex; justify-content: flex-end;">
                                         <button mat-stroked-button (click)="editReview(film)">Edit This Review</button>
@@ -94,8 +94,6 @@
                 </tr>
                 <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
 
-                <!-- <tr mat-header-row *matHeaderRowDef="tableDisplayCols"></tr>
-                <tr mat-row class="data-row" *matRowDef="let row; columns: tableDisplayCols;"></tr> -->
             </table>
         </div>
 

@@ -9,13 +9,15 @@
             
             <ng-template #review>
                 <div style="margin-top: 2%; display: flex;">
-                    <button mat-raised-button (click)="goBackToLastPage()"><mat-icon>keyboard_backspace</mat-icon>Back to Previous Page</button>
+                    <button mat-raised-button color="primary" (click)="goBackToLastPage()">
+                        <mat-icon>keyboard_backspace</mat-icon>Back to Previous Page</button>
                 </div>
                 <h2 style="margin-top: 1.5%; display: flex; align-items: center;">
                     <span style="color: #707070;">Review for&nbsp;&nbsp;</span> 
                     <span style="font-size: 1.6em;">{{ movie.movieDetails?.title }}</span>
                     <span style="flex: 1 1 auto;"></span>
-                    <button mat-raised-button (click)="goBackToReviews()"><mat-icon>list</mat-icon>Go To Reviews List</button>
+                    <button mat-raised-button color="primary" (click)="goBackToReviews()">
+                        <mat-icon>list</mat-icon>Go To Reviews List</button>
                 </h2>
 
                 <div class="col-12">
@@ -46,7 +48,7 @@
                                         <div id="previous-reviews-header" style="display: flex; align-items: center;">
                                             <p color="accent" style="margin: 0; font-size: 1.2em; font-weight: bold;">&nbsp;Previous Reviews</p>
                                             <span style="flex: 1 1 auto;"></span>
-                                            <button mat-raised-button style="background-color: #c2185c;" (click)="addReview()">
+                                            <button mat-raised-button color="primary" (click)="addReview()">
                                                 Add A New Review</button>
                                         </div>
 
@@ -56,7 +58,7 @@
                                         <div class="movie-reviews">
                                             <div class="review" *ngFor="let review of reviews; let i = index; last as isLast">
                                                 <div style="display: flex; align-items: center;">
-                                                    <p style="margin: 0; color: #c2185cd1; font-weight: bold;">
+                                                    <p class="review-heading-text">
                                                         Watched: {{ formatDate(review.watchDate) }} &nbsp;&nbsp;|&nbsp;&nbsp; Rating: {{ review.rating }}</p>
                                                     <span style="flex: 1 1 auto;"></span>
                                                     <button mat-stroked-button class="review-action-button" (click)="editReview(review, i)"><mat-icon>edit</mat-icon>Edit Review</button>

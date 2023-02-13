@@ -1,3 +1,5 @@
+@import "../../styles.scss";
+
 .login-form-button {
     margin-top: 4.5%; 
     margin-right: 3%;
@@ -8,7 +10,7 @@
     border-radius: 5px;
     padding: 3%;
     color: white;
-    background-color: #db3a2f;
+    background-color: map-get($warn, 600);
     box-shadow: 0 0 22px #000000;
     position: relative;
     right: 15px;

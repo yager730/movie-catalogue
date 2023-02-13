@@ -9,7 +9,7 @@ import { User } from './user.model';
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
-  styleUrls: ['./auth.component.css']
+  styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;

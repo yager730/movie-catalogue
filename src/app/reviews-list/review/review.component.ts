@@ -13,7 +13,7 @@ import { movieReview, movieReviews } from '../review.model';
 @Component({
   selector: 'app-review',
   templateUrl: './review.component.html',
-  styleUrls: ['./review.component.css'],
+  styleUrls: ['./review.component.scss'],
   providers: [ReviewsService]
 })
 export class ReviewComponent implements OnInit {
