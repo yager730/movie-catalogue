@@ -23,7 +23,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 export class ReviewsListComponent implements OnInit, OnDestroy {
   reviewsSubscription: Subscription;  
   reviewsList: movieReviews[];
-  tableDisplayCols = ['title', 'lastWatched', 'timesLogged', 'rating', 'options', 'expand'];
+  tableDisplayCols = ['title', 'lastWatched', 'rating', 'timesLogged', 'options', 'expand'];
 
   columnsToDisplayWithExpand = [...this.tableDisplayCols, 'expand'];
   expandedElement: movieReviews | null;

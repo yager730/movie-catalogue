@@ -57,17 +57,26 @@
                 </table>
             </div>
 
-            <mat-paginator #paginator *ngIf="numResults > 12"
+            <!-- <mat-paginator #paginator *ngIf="numResults > 12"
                 style="margin-top: 2%; border-radius: 5px;"
                 [length]="numResults"
                 [pageSize]="12"
                 [pageSizeOptions]="[12, 30, 60]"
                 aria-label="Select page"
                 (page)="handlePagination($event)">
-            </mat-paginator>
+            </mat-paginator> -->
 
         </div>
     </ng-template>
+
+    <mat-paginator #paginator *ngIf="numResults > 12"
+        style="margin-top: 2%; border-radius: 5px;"
+        [length]="numResults"
+        [pageSize]="12"
+        [pageSizeOptions]="[12, 30, 60]"
+        aria-label="Select page"
+        (page)="handlePagination($event)">
+    </mat-paginator>
 
     <ng-template #noFilms>
         <div class="col-12" style="padding-top: 10%; margin: auto; text-align: center;">

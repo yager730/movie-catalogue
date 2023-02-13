@@ -10,7 +10,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 
-import * as HelperFunctions from '../shared/utils';
+import * as Utils from '../shared/utils';
 
 function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
@@ -50,6 +50,8 @@ export class WatchlistComponent implements OnInit, OnDestroy {
       this.numResults = state.films.length;
       this.firstDisplayedIndex = state.firstDisplayedFilmIndex;
       this.lastDisplayedIndex = state.lastDisplayedFilmIndex;
+      // console.log(this.paginator.pageIndex);
+      // this.paginator.pageIndex = Math.floor(state.firstDisplayedFilmIndex / 12);
     });
   }
 
@@ -98,9 +100,9 @@ export class WatchlistComponent implements OnInit, OnDestroy {
     });
   }
 
-  getDirector(film: movieInfo) { return HelperFunctions.getDirector(film) };
-  getReleaseDate(film: movieInfo) { return HelperFunctions.getReleaseDate(film) };
-  getRating(film: movieInfo) { return HelperFunctions.getRating(film) };
+  getDirector(film: movieInfo) { return Utils.getDirector(film) };
+  getReleaseDate(film: movieInfo) { return Utils.getReleaseDate(film) };
+  getRating(film: movieInfo) { return Utils.getRating(film) };
 
   goToReviews(film: movieInfo) {
     // Reset watchlist pagination for when user goes back

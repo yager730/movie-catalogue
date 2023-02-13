@@ -27,7 +27,7 @@
                     *ngIf="!onWatchlist; else disabledButton"
                     (click)="addToWatchlist()"><mat-icon>add</mat-icon>Add to Watchlist</button>
                     <ng-template #disabledButton>
-                        <button mat-raised-button disabled style="margin: 5% 0% 3% 0%;"
+                        <button class="movie-actions" mat-raised-button disabled style="margin: 5% 0% 3% 0%;"
                         matTooltip="Remove from watchlist page">
                         <mat-icon>check</mat-icon>Added to Watchlist</button>
                     </ng-template>
