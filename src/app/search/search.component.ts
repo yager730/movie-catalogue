@@ -44,8 +44,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     this.displaying = 'Search';
-    this.store.dispatch(new SearchActions.UpdateSearchTerm(this.currentSearchTerm));
-    this.store.dispatch(new SearchActions.SearchForTerm(this.currentSearchTerm));
+    this.store.dispatch(new SearchActions.UpdateSearchTerm(this.search.get('searchTerm').value));
+    this.store.dispatch(new SearchActions.SearchForTerm(this.search.get('searchTerm').value));
     if (this.numResults > 20) { this.paginator.firstPage(); }
   }
 

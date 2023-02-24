@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import * as fromApp from '../store/app.reducer';
@@ -21,26 +21,25 @@ function compare(a: number | string | Date, b: number | string | Date, isAsc: bo
   templateUrl: './watchlist.component.html',
   styleUrls: ['./watchlist.component.css'],
 })
-export class WatchlistComponent implements OnInit, OnDestroy {
+export class WatchlistComponent implements OnInit, OnDestroy, AfterViewInit {
   watchlistSubscription: Subscription;
   paginatorSubscription: Subscription;
   
   userWatchlistLoading = false;
   
-  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginator', { static: true }) paginator: MatPaginator;
+
   numResults: number;
-  displayPage: number;
-  resultsPerPage: number;
   firstDisplayedIndex: number;
   lastDisplayedIndex: number;
 
   tableView = false;
   tableDisplayCols = ['title', 'director', 'date', 'rating', 'options'];
-  watchlistDataSource: MatTableDataSource<movieInfo> = new MatTableDataSource<movieInfo>();
+  watchlistDataSource: MatTableDataSource<movieInfo> = new MatTableDataSource<movieInfo>([]);
   @ViewChild(MatSort, {static: false}) sort: MatSort;
   sortedData: movieInfo[];
 
-  constructor ( private store: Store<fromApp.AppState>, private router: Router ) {}
+  constructor ( private store: Store<fromApp.AppState>, private router: Router, private ref: ChangeDetectorRef ) {}
 
   ngOnInit(): void {
     this.watchlistSubscription = this.store.select('watchlist')
@@ -50,9 +49,14 @@ export class WatchlistComponent implements OnInit, OnDestroy {
       this.numResults = state.films.length;
       this.firstDisplayedIndex = state.firstDisplayedFilmIndex;
       this.lastDisplayedIndex = state.lastDisplayedFilmIndex;
-      // console.log(this.paginator.pageIndex);
-      // this.paginator.pageIndex = Math.floor(state.firstDisplayedFilmIndex / 12);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.paginator.pageSize = (this.lastDisplayedIndex - this.firstDisplayedIndex);
+    this.paginator.pageIndex = Math.floor(this.firstDisplayedIndex / (this.lastDisplayedIndex - this.firstDisplayedIndex));
+    this.watchlistDataSource.paginator = this.paginator;
+    this.ref.detectChanges();
   }
 
   handlePagination(event?: PageEvent) {
@@ -66,8 +70,6 @@ export class WatchlistComponent implements OnInit, OnDestroy {
   }
 
   switchView() {
-    this.watchlistDataSource.paginator = this.paginator;
-    console.log(this.watchlistDataSource.paginator)
     this.tableView = !this.tableView;
     this.sortedData = this.watchlistDataSource.data.slice();
     console.log(this.tableView ? 'switched to table view' : 'switched to watchlist view');

@@ -69,8 +69,8 @@
         </div>
     </ng-template>
 
-    <mat-paginator #paginator *ngIf="numResults > 12"
-        style="margin-top: 2%; border-radius: 5px;"
+    <mat-paginator #paginator [hidden]="!(numResults > 12)"
+        style="margin-top: 2%; margin-bottom: 3%; border-radius: 5px;"
         [length]="numResults"
         [pageSize]="12"
         [pageSizeOptions]="[12, 30, 60]"
