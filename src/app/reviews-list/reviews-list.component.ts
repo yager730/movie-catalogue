@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
 import { movieReviews } from './review.model';
@@ -7,6 +7,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as Utils from '../shared/utils';
 import { MovieDetails } from '../shared/movie-info.model';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { MatSort, Sort } from '@angular/material/sort';
+
+function compare(a: number | string | Date, b: number | string | Date, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
 
 @Component({
   selector: 'app-reviews-list',
@@ -27,6 +32,8 @@ export class ReviewsListComponent implements OnInit, OnDestroy {
 
   columnsToDisplayWithExpand = [...this.tableDisplayCols, 'expand'];
   expandedElement: movieReviews | null;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  sortedData: movieReviews[];
 
   constructor ( private store: Store<fromApp.AppState>, 
     private router: Router, private route: ActivatedRoute ) {}
@@ -37,6 +44,7 @@ export class ReviewsListComponent implements OnInit, OnDestroy {
     .subscribe((results) => {
       console.log(results);
       this.reviewsList = results.reviewsList;
+      this.sortData({active: "lastWatched", direction: "asc"});
     })
   }
 
@@ -61,6 +69,30 @@ export class ReviewsListComponent implements OnInit, OnDestroy {
   getReleaseDate(film: MovieDetails) { return Utils.getReleaseDate({ movieDetails: film, movieCrew: null, movieImagePaths: null }) };
   getRating(film: MovieDetails) { return Utils.getRating({ movieDetails: film, movieCrew: null, movieImagePaths: null }) };
 
+  sortData(sort: Sort) {
+    const data = this.reviewsList.slice();
+    if (!sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
+
+    this.sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'title':
+          return compare(a.movieDetails.title.toLowerCase(), b.movieDetails.title.toLocaleLowerCase(), isAsc);
+        case 'lastWatched':
+          return compare(new Date(b.reviews[0].watchDate), 
+            new Date(a.reviews[0].watchDate), isAsc);
+        case 'rating':
+          return compare(b.reviews[0].rating, a.reviews[0].rating, isAsc);
+        case 'timesLogged':
+          return compare(b.reviews.length, a.reviews.length, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
 
   ngOnDestroy() {
     this.reviewsSubscription.unsubscribe();

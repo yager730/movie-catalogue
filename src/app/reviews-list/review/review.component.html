@@ -9,14 +9,14 @@
             
             <ng-template #review>
                 <div style="margin-top: 2%; display: flex;">
-                    <button mat-raised-button color="primary" (click)="goBackToLastPage()">
+                    <button mat-raised-button color="primary" class="review-actions" (click)="goBackToLastPage()">
                         <mat-icon>keyboard_backspace</mat-icon>Back to Previous Page</button>
                 </div>
                 <h2 style="margin-top: 1.5%; display: flex; align-items: center;">
                     <span style="color: #707070;">Review for&nbsp;&nbsp;</span> 
                     <span style="font-size: 1.6em;">{{ movie.movieDetails?.title }}</span>
                     <span style="flex: 1 1 auto;"></span>
-                    <button mat-raised-button color="primary" (click)="goBackToReviews()">
+                    <button mat-raised-button color="primary" class="review-actions" (click)="goBackToReviews()">
                         <mat-icon>list</mat-icon>Go To Reviews List</button>
                 </h2>
 
@@ -48,7 +48,7 @@
                                         <div id="previous-reviews-header" style="display: flex; align-items: center;">
                                             <p color="accent" style="margin: 0; font-size: 1.2em; font-weight: bold;">&nbsp;Previous Reviews</p>
                                             <span style="flex: 1 1 auto;"></span>
-                                            <button mat-raised-button color="primary" (click)="addReview()">
+                                            <button mat-raised-button color="primary" class="review-actions" (click)="addReview()">
                                                 Add A New Review</button>
                                         </div>
 

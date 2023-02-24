@@ -1,24 +1,24 @@
 /* @import "../../styles.scss"; */
 
-tr.example-detail-row {
+tr.detail-row {
     height: 0;
 }
 
-.example-element-row td {
+.element-row td {
     border-bottom-width: 0;
 }
 
-tr.example-element-row:not(.example-expanded-row):hover {
+tr.element-row:not(.expanded-row):hover {
     background: rgb(60, 60, 60);
 }
 
-tr.example-element-row:not(.example-expanded-row):active {
+tr.element-row:not(.expanded-row):active {
     background: rgb(60, 60, 60);
 }
 
 /* Getting the color dynamically from the styles.scss messes up the formatting */
 .expanded-row-header-text p {
-    color: #FFF59D;
+    color: #c2ddf5;
     margin-bottom: 0; 
     font-size: 1.2em; 
     padding-left: 10px;

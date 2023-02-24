@@ -14,34 +14,187 @@
 
 @include mat-core();
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
+// Dark Theme text
+$light-text: #ffffff;
+$light-primary-text: $light-text;
+$light-accent-text: rgba($light-primary-text, 0.7);
+$light-disabled-text: rgba($light-primary-text, 0.5);
+$light-dividers: rgba($light-primary-text, 0.12);
+$light-focused: rgba($light-primary-text, 0.12);
 
-$primary: mat-palette($mat-blue-grey, 800);
-$accent: mat-palette($mat-amber, 300);
+$mat-dark-theme-foreground: (
+  base:              $light-text,
+  divider:           $light-dividers,
+  dividers:          $light-dividers,
+  disabled:          $light-disabled-text,
+  disabled-button:   rgba($light-text, 0.3),
+  disabled-text:     $light-disabled-text,
+  elevation:         black,
+  hint-text:         $light-disabled-text,
+  secondary-text:    $light-accent-text,
+  accent-text:       $light-accent-text,
+  icon:              $light-text,
+  icons:             $light-text,
+  text:              $light-text,
+  slider-min:        $light-text,
+  slider-off:        rgba($light-text, 0.3),
+  slider-off-active: rgba($light-text, 0.3),
+);
 
-// The warn palette is optional (defaults to red).
+// Dark bg
+$dark-background:     #2c2c2c;
+$dark-bg-lighter-5:   lighten($dark-background, 5%);
+$dark-bg-lighter-10:  lighten($dark-background, 10%);
+$dark-bg-lighter-20:  lighten($dark-background, 20%);
+$dark-bg-lighter-30:  lighten($dark-background, 30%);
+$light-bg-alpha-4:    rgba(#fafafa, 0.04);
+$light-bg-alpha-12:   rgba(#fafafa, 0.12);
 
-$warn: mat-palette($mat-red, 600, 500, A700);
+// Background palette for dark themes.
+$mat-dark-theme-background: (
+  background:               $dark-background,
+  status-bar:               $dark-bg-lighter-20,
+  app-bar:                  $dark-bg-lighter-5,
+  hover:                    $light-bg-alpha-4,
+  card:                     $dark-bg-lighter-5,
+  dialog:                   $dark-bg-lighter-5,
+  tooltip:                  $dark-bg-lighter-20,
+  disabled-button:          $light-bg-alpha-12,
+  raised-button:            $dark-bg-lighter-5,
+  focused-button:           $light-focused,
+  selected-button:          $dark-bg-lighter-20,
+  selected-disabled-button: $dark-bg-lighter-30,
+  disabled-button-toggle:   $dark-bg-lighter-10,
+  unselected-chip:          $dark-bg-lighter-20,
+  disabled-list-option:     $dark-bg-lighter-10,
+);
 
-// Create the theme object (a Sass map containing all of the palettes).
+// Theme Config
 
-$theming-material-components-theme: mat-dark-theme((
+body {
+    --primary-color: #3c4760;
+    --primary-lighter-color: #c5c8cf;
+    --primary-darker-color: #272f44;
+    --text-primary-color: #{$light-primary-text};
+    --text-primary-lighter-color: #{$dark-primary-text};
+    --text-primary-darker-color: #{$light-primary-text};
+}   
+$primary: (
+     50: #ebeeff,
+    100: #cdd8ee,
+    200: #b3bdd8,
+    300: #97a3c2,
+    400: #818fb0,
+    500: #6c7b9f,
+    600: #5d6d8e,
+    700: #4c5976,
+    800: #3c4760,
+    900: #293248,
+    contrast : (
+        50: $dark-primary-text,
+        100: $dark-primary-text,
+        200: $dark-primary-text,
+        300: $dark-primary-text,
+        400: $dark-primary-text,
+        500: $light-primary-text,
+        600: $light-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text,
+    )
+);
+$theme-primary: mat-palette($primary);
+
+
+body {
+    --text-accent-color: #{$light-primary-text};
+    --text-accent-lighter-color: #{$dark-primary-text};
+    --text-accent-darker-color: #{$light-primary-text};
+}   
+$accent: (
+     50: #e6f2fb,
+    100: #c2ddf5,
+    200: #9ec9ef,
+    300: #7db4e7,
+    400: #68a4e2,
+    500: #5a95dc,
+    600: #5387cf,
+    700: #4a76bc,
+    800: #4365aa,
+    900: #364889,
+    contrast : (
+        50: $dark-primary-text,
+        100: $dark-primary-text,
+        200: $dark-primary-text,
+        300: $dark-primary-text,
+        400: $dark-primary-text,
+        500: $dark-primary-text,
+        600: $dark-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text,
+    )
+);
+$theme-accent: mat-palette($accent);
+
+
+body {
+    --text-accent-color: #{$light-primary-text};
+    --text-accent-lighter-color: #{$dark-primary-text};
+    --text-accent-darker-color: #{$light-primary-text};
+}   
+$warn: (
+     50: #fff8df,
+    100: #ffebaf,
+    200: #ffdf7b,
+    300: #ffd342,
+    400: #ffc800,
+    500: #ffbe00,
+    600: #ffb000,
+    700: #ff9c00,
+    800: #ff8a00,
+    900: #ff6800,
+    contrast : (
+        50: $dark-primary-text,
+        100: $dark-primary-text,
+        200: $dark-primary-text,
+        300: $dark-primary-text,
+        400: $dark-primary-text,
+        500: $dark-primary-text,
+        600: $dark-primary-text,
+        700: $light-primary-text,
+        800: $light-primary-text,
+        900: $light-primary-text,
+    )
+);
+$theme-warn: mat-palette($warn);
+
+$theme: mat-dark-theme((
     color: (
-        primary: $primary,
-        accent: $accent,
-        warn: $warn
+        primary: $theme-primary,
+        accent: $theme-accent,
+        warn: $theme-warn
     ),
     typography: mat.define-typography-config(),
     density: 0,
 ));
+@include angular-material-theme($theme);
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
+// $theming-material-components-theme: mat-dark-theme((
+//     color: (
+//         primary: $primary,
+//         accent: $accent,
+//         warn: $warn
+//     ),
+//     typography: mat.define-typography-config(),
+//     density: 0,
+// ));
 
-@include angular-material-theme($theming-material-components-theme);
+// // Include theme styles for core and each component used in your app.
+// // Alternatively, you can import and @include the theme mixins for each component
+// // that you are using.
+
+// @include angular-material-theme($theming-material-components-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
