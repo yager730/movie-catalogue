@@ -9,7 +9,7 @@ import * as WatchlistActions from '../../watchlist/store/watchlist.actions';
 import * as ReviewsActions from '../../reviews-list/store/reviews.actions';
 import * as SearchActions from './search.actions';
 
-const baseURL = 'https://api.themoviedb.org/3';
+const baseURL = environment.TMDB_Base_URL;
 
 const handleError = (errorResponse: any) => {
     let errorMessage = 'An unkown error has occurred';
@@ -124,11 +124,11 @@ export class SearchEffects {
                     runtime: resData.details.runtime,
                     release_date: resData.details.release_date,
                     score: resData.details.vote_average,
-                    poster: resData.details.poster_path ? 'https://image.tmdb.org/t/p/original' + resData.details.poster_path : null,
+                    poster: resData.details.poster_path ? environment.TMDB_Images_URL + resData.details.poster_path : null,
                     overview: resData.details.overview
                 }
                 const crewData = { cast: resData.crew.cast, crew: resData.crew.crew }
-                const image_paths = resData.images.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
+                const image_paths = resData.images.backdrops.map((backdrop) => environment.TMDB_Images_URL + backdrop.file_path)
                 return new SearchActions.GetSelectedMovieInfo({
                     movieDetails: movieDetails,
                     movieCrew: crewData,

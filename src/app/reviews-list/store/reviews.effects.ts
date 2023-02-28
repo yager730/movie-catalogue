@@ -4,15 +4,12 @@ import { Actions, ofType, createEffect } from '@ngrx/effects';
 import { map, switchMap, take } from 'rxjs';
 import { environment } from 'src/environments/environments';
 import * as ReviewsActions from './reviews.actions';
-import * as Utils from '../../shared/utils';
 
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
-import { MovieDetails, movieInfo } from 'src/app/shared/movie-info.model';
 import { movieReview, movieReviews } from '../review.model';
 
-const tmdbURL = 'https://api.themoviedb.org/3';
-const firebaseURL = 'https://tyager-angular-practice-app-default-rtdb.firebaseio.com'
+const firebaseURL = environment.Firebase_Base_URL;
 
 @Injectable()
 export class ReviewsEffects {

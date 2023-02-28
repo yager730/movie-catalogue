@@ -63,7 +63,7 @@ export class AuthEffects {
         ofType(AuthActions.BEGIN_SIGNUP),
         switchMap((signupInfo: AuthActions.InitiateSignUp) => {
             return this.http
-            .post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + environment.Auth_API_key, 
+            .post<AuthResponseData>(environment.Auth_Base_URL + '/v1/accounts:signUp?key=' + environment.Auth_API_key, 
             {
                 email: signupInfo.payload.email,
                 password: signupInfo.payload.password,
@@ -87,7 +87,7 @@ export class AuthEffects {
         ofType(AuthActions.BEGIN_LOGIN),
         switchMap((loginInfo: AuthActions.InitiateLogin) => {
             return this.http
-            .post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + environment.Auth_API_key, 
+            .post<AuthResponseData>(environment.Auth_Base_URL + '/v1/accounts:signInWithPassword?key=' + environment.Auth_API_key, 
             {
                 email: loginInfo.payload.email,
                 password: loginInfo.payload.password,
@@ -156,7 +156,7 @@ export class AuthEffects {
     initiatlizeUserData = createEffect(() => this.actions$.pipe(
         ofType(AuthActions.SIGNUP),
         map((loginInfo: AuthActions.Signup) => {
-            this.http.put(`https://tyager-angular-practice-app-default-rtdb.firebaseio.com/users/${loginInfo.payload.userId}.json`, 
+            this.http.put(environment.Firebase_Base_URL + `/users/${loginInfo.payload.userId}.json`, 
                 { 'watchlist': '' }).pipe(take(1)).subscribe(() => console.log('Finished initializing watchlist!'));
         })
     ), {dispatch: false});

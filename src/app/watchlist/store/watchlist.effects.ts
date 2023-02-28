@@ -10,8 +10,9 @@ import { Store } from '@ngrx/store';
 import * as fromApp from '../../store/app.reducer';
 import { movieInfo } from 'src/app/shared/movie-info.model';
 
-const tmdbURL = 'https://api.themoviedb.org/3';
-const firebaseURL = 'https://tyager-angular-practice-app-default-rtdb.firebaseio.com'
+const tmdbURL = environment.TMDB_Base_URL;
+const tmdbImageURL = environment.TMDB_Images_URL;
+const firebaseURL = environment.Firebase_Base_URL;
 
 @Injectable()
 export class WatchlistEffects {
@@ -42,11 +43,11 @@ export class WatchlistEffects {
                                     runtime: data.details.runtime,
                                     release_date: data.details.release_date,
                                     score: data.details.vote_average,
-                                    poster: data.details.poster_path ? 'https://image.tmdb.org/t/p/original' + data.details.poster_path : null,
+                                    poster: data.details.poster_path ? tmdbImageURL + data.details.poster_path : null,
                                     overview: data.details.overview
                                 },
                                 movieCrew: { cast: data.crew.cast, crew: data.crew.crew },
-                                movieImagePaths: data.images.backdrops.map((backdrop) => 'https://image.tmdb.org/t/p/original' + backdrop.file_path)
+                                movieImagePaths: data.images.backdrops.map((backdrop) => tmdbImageURL + backdrop.file_path)
                             };
                             //console.log(`movieInfo loaded for ${movieInfo.movieDetails.id}: ${movieInfo.movieDetails.title}`)
                             userWatchlistMovies = [...userWatchlistMovies];
